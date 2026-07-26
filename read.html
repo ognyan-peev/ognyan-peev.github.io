@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index,follow,noarchive">
+  <title>Четене | Огнян Пеев</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="reader-page">
+<header class="reader-toolbar">
+  <div class="toolbar-inner">
+    <div class="toolbar-group">
+      <a class="toolbtn" href="index.html" title="Към библиотеката" aria-label="Към библиотеката">⌂</a>
+      <strong class="work-name" id="toolbarTitle">Зареждане…</strong>
+    </div>
+    <div class="toolbar-group">
+      <button class="toolbtn" id="fontDown" title="Намали шрифта">А−</button>
+      <button class="toolbtn" id="fontUp" title="Увеличи шрифта">А+</button>
+      <button class="toolbtn" id="shareBtn" title="Сподели страницата">Сподели</button>
+      <button class="toolbtn" id="tocBtn" title="Съдържание">Съдържание</button>
+    </div>
+  </div>
+</header>
+
+<main class="reader-wrap">
+  <article class="reader-paper">
+    <header class="reader-header">
+      <div class="eyebrow" id="workType"></div>
+      <h1 id="workTitle">Зареждане…</h1>
+      <div class="meta" id="workAuthor"></div>
+    </header>
+    <h2 class="chapter-title" id="chapterTitle"></h2>
+    <div class="chapter-subtitle" id="chapterSubtitle"></div>
+    <section class="reader-text" id="readerText"></section>
+    <nav class="reader-nav">
+      <button class="button secondary" id="prevBtn">← Предишна</button>
+      <button class="button secondary toc-middle" id="tocBtn2">Съдържание</button>
+      <button class="button secondary next" id="nextBtn">Следваща →</button>
+    </nav>
+    <div class="copyright-note">
+      © Огнян Пеев. Всички права запазени.<br>
+      Произведението е предоставено единствено за четене в този сайт. Копиране, публикуване и разпространяване без разрешението на автора не се допуска.
+    </div>
+  </article>
+</main>
+
+<div class="toc-panel" id="tocPanel" role="dialog" aria-modal="true">
+  <div class="toc-card">
+    <div style="display:flex;justify-content:space-between;gap:15px;align-items:center">
+      <h2>Съдържание</h2>
+      <button class="toolbtn" id="closeToc" style="color:#3c2b20;border-color:#876f5b">✕</button>
+    </div>
+    <div class="toc-list" id="tocList"></div>
+  </div>
+</div>
+<div class="notice" id="notice"></div>
+<script src="assets/reader.js"></script>
+</body>
+</html>
