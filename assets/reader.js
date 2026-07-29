@@ -37,6 +37,7 @@
       u.searchParams.set("section", section);
       history.replaceState({}, "", u);
     }
+    window.siteAnalytics?.event('view_section', { work, section_number: section + 1, section_title: s.title || '' });
     scrollTo({top: 0, behavior: "smooth"});
   }
 
@@ -62,6 +63,22 @@
       toc.appendChild(b);
     });
     setSection(section, false);
+
+    // Отчита читател само след общо 5 минути активно време на видима страница.
+    let activeSeconds = 0;
+    let sentFiveMinutes = false;
+    setInterval(() => {
+      if (sentFiveMinutes || document.hidden || !document.hasFocus()) return;
+      activeSeconds += 1;
+      if (activeSeconds >= 300) {
+        sentFiveMinutes = true;
+        window.siteAnalytics?.event('active_reader_5_minutes', {
+          work,
+          work_title: data.title,
+          section_number: section + 1
+        });
+      }
+    }, 1000);
   }
 
   const script = document.createElement("script");

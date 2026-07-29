@@ -234,3 +234,48 @@ button, a.button { font: inherit; }
 @media (max-width:820px) {
   #romani .shelf, #razkazi .shelf { grid-template-columns:1fr !important; }
 }
+
+
+/* Романи: две книги отгоре, продължението под „СИН, СИН КАТО ОЧИТЕ Ѝ“ */
+.novels-shelf {
+  grid-template-columns: repeat(2, minmax(0, 360px));
+  justify-content: center;
+}
+.novels-shelf .sequel-card { grid-column: 2; }
+.series-note {
+  margin: 0 0 8px !important;
+  color: var(--accent) !important;
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* Частно измерване: посетителят вижда само избора, не статистиката */
+.cookie-banner {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  padding: 14px;
+  background: rgba(35, 20, 12, .97);
+  border-top: 1px solid rgba(255,255,255,.2);
+  color: #fff2d4;
+  box-shadow: 0 -10px 30px rgba(0,0,0,.28);
+}
+.cookie-inner {
+  width: min(1060px, 100%);
+  margin: auto;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  justify-content: space-between;
+}
+.cookie-inner p { margin: 0; line-height: 1.45; }
+.cookie-actions { display: flex; gap: 10px; flex: 0 0 auto; }
+.cookie-banner .button { min-width: 112px; }
+.cookie-banner .button.secondary { color: #fff2d4; border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.08); }
+
+@media (max-width:820px) {
+  .novels-shelf { grid-template-columns: 1fr !important; }
+  .novels-shelf .sequel-card { grid-column: auto; }
+  .cookie-inner { flex-direction: column; align-items: stretch; }
+  .cookie-actions { justify-content: flex-end; }
+}
