@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Семейни рецепти — кулинарно наследство от старите тефтерчета.">
+  <title>Семейни рецепти | Огнян Пеев</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/analytics.js" defer></script>
+  <script src="assets/recipes-data.js" defer></script>
+  <script src="assets/recipes.js" defer></script>
+</head>
+<body class="recipes-page">
+  <header class="topbar recipe-topbar">
+    <nav class="nav">
+      <a class="brand" href="index.html">ОГНЯН ПЕЕВ</a>
+      <div class="nav-links">
+        <a href="index.html">Начало</a>
+        <a href="library.html">Романи и разкази</a>
+      </div>
+    </nav>
+  </header>
+  <section class="recipe-hero">
+    <div class="recipe-hero-panel">
+      <div class="eyebrow">Кулинарно наследство от старите тефтерчета</div>
+      <h1>Семейни рецепти</h1>
+      <p>Кичка, Боряна и малкият Огнян</p>
+    </div>
+  </section>
+  <main class="recipes-layout">
+    <aside class="recipe-sidebar" aria-label="Категории рецепти">
+      <div class="sidebar-title">Категории</div>
+      <a class="flour-button" data-category="starters" href="recipes.html?category=starters">Предястия</a>
+      <a class="flour-button" data-category="mains" href="recipes.html?category=mains">Основни с месо</a>
+      <a class="flour-button" data-category="desserts" href="recipes.html?category=desserts">Десерти</a>
+      <a class="flour-button" data-category="drinks" href="recipes.html?category=drinks">Напитки</a>
+      <div class="sidebar-divider"></div>
+      <a class="flour-button small" data-category="new" href="recipes.html?category=new">Нови добавени</a>
+      <a class="flour-button small" data-category="favorites" href="recipes.html?category=favorites">Любими / избрани</a>
+    </aside>
+    <section class="recipe-content">
+      <header class="recipe-list-heading">
+        <div class="eyebrow" id="categoryEyebrow">Семейни рецепти</div>
+        <h2 id="categoryTitle">Нови добавени</h2>
+        <p id="categoryDescription"></p>
+      </header>
+      <div class="recipe-grid" id="recipeGrid" aria-live="polite"></div>
+      <div class="empty-recipes" id="emptyRecipes" hidden></div>
+    </section>
+  </main>
+  <footer class="footer recipe-footer">© Огнян Пеев. Всички права запазени.<br>Създадено от Огнян Пеев и ChatGPT</footer>
+</body>
+</html>

@@ -279,3 +279,161 @@ button, a.button { font: inherit; }
   .cookie-inner { flex-direction: column; align-items: stretch; }
   .cookie-actions { justify-content: flex-end; }
 }
+
+
+/* ===== Нов вход към сайта ===== */
+.portal-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255,255,255,.12), transparent 30%),
+    linear-gradient(135deg, #2f1c12, #69452c 50%, #2c1a10);
+  color: #fff1d1;
+}
+.portal-header {
+  width: min(1180px, calc(100% - 32px));
+  margin: auto;
+  padding: 25px 0 5px;
+}
+.portal-header .brand { color: #f7e4ba; }
+.portal-main { width: min(1180px, calc(100% - 32px)); margin: auto; padding: 42px 0 76px; }
+.portal-intro { text-align: center; margin-bottom: 38px; }
+.portal-intro h1 { font-size: clamp(48px, 8vw, 88px); margin: 8px 0 12px; line-height: .98; }
+.portal-intro p { font-size: clamp(18px, 2.4vw, 25px); margin: 0; color: #ead8b6; }
+.portal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px; }
+.portal-card {
+  position: relative; display: block; min-height: 700px; overflow: hidden;
+  border-radius: 24px; border: 1px solid rgba(255,242,205,.42);
+  box-shadow: 0 25px 70px rgba(0,0,0,.42); text-decoration: none;
+  background: #21130d; isolation: isolate;
+}
+.portal-card::after {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(transparent 44%, rgba(24,13,8,.25) 62%, rgba(24,13,8,.95));
+}
+.portal-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.portal-card:hover img { transform: scale(1.025); }
+.portal-card-copy {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: 0;
+  padding: 38px 34px; text-align: center;
+}
+.portal-card-copy strong { display: block; font-size: clamp(31px, 4vw, 48px); line-height: 1.05; margin-bottom: 12px; }
+.portal-card-copy small { display: block; font-size: 19px; line-height: 1.45; color: #f1dfba; }
+.portal-footer { background: rgba(28,15,9,.85); }
+
+/* Лекото освежаване на литературната част */
+.library-page .topbar { background: rgba(38,25,18,.96); }
+.library-page .hero-card { border-radius: 28px; background: rgba(40,25,17,.79); }
+.library-page .book-card { border-radius: 20px; }
+.library-page .button { border-radius: 999px; }
+
+/* ===== Семейни рецепти ===== */
+.recipes-page, .recipe-detail-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(39,23,12,.48), rgba(39,23,12,.67)),
+    url('images/recipes-cover.webp') center top / cover fixed;
+}
+.recipe-topbar { background: rgba(57,34,18,.96); }
+.recipe-hero { padding: 58px 16px 40px; }
+.recipe-hero-panel {
+  width: min(850px, 100%); margin: auto; padding: 35px 28px; text-align: center;
+  color: #5c2619; border-radius: 26px;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(255,255,255,.76) 0 2px, transparent 3px),
+    radial-gradient(circle at 75% 70%, rgba(255,255,255,.62) 0 2px, transparent 3px),
+    linear-gradient(rgba(255,248,219,.94), rgba(239,216,165,.94));
+  background-size: 24px 24px, 31px 31px, auto;
+  border: 2px solid rgba(105,61,26,.64); box-shadow: 0 18px 54px rgba(0,0,0,.35);
+}
+.recipe-hero-panel h1 { font-size: clamp(48px, 8vw, 78px); margin: 8px 0 10px; line-height: 1; }
+.recipe-hero-panel p { font-size: 23px; margin: 0; font-style: italic; }
+.recipes-layout {
+  width: min(1280px, calc(100% - 28px)); margin: 0 auto 70px;
+  display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 28px; align-items: start;
+}
+.recipe-sidebar {
+  position: sticky; top: 84px; display: grid; gap: 14px; padding: 24px;
+  border-radius: 25px; border: 1px solid rgba(106,65,31,.65);
+  background: rgba(244,224,178,.94); box-shadow: 0 18px 48px rgba(0,0,0,.3);
+}
+.sidebar-title { text-align: center; font-size: 25px; font-weight: 700; color: #6a2a1e; margin-bottom: 3px; }
+.sidebar-divider { height: 1px; background: rgba(109,67,31,.35); margin: 5px 8px; }
+.flour-button {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: flex; justify-content: center; align-items: center; min-height: 62px;
+  padding: 13px 18px; text-align: center; text-decoration: none; font-size: 20px; font-weight: 700;
+  color: #5b2d20; border: 1px solid rgba(112,67,31,.7); border-radius: 999px;
+  background:
+    radial-gradient(circle at 12% 28%, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 75%, rgba(255,255,255,.8) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 62% 28%, rgba(255,255,255,.58) 0 1px, transparent 2px),
+    linear-gradient(#f5e8c6, #dfc694);
+  background-size: 22px 22px, 31px 31px, 17px 17px, auto;
+  box-shadow: inset 0 2px 5px rgba(255,255,255,.7), 0 7px 15px rgba(75,42,22,.16);
+  transition: transform .18s ease, filter .18s ease;
+}
+.flour-button.small { min-height: 54px; font-size: 18px; }
+.flour-button:hover { transform: translateY(-2px); filter: brightness(1.04); }
+.flour-button.active { color: #fff1d0; border-color: #64291c; background: linear-gradient(#8f3d28, #64261b); box-shadow: 0 8px 18px rgba(65,27,17,.3); }
+.recipe-content {
+  min-height: 600px; padding: clamp(24px, 4vw, 44px);
+  border-radius: 28px; border: 1px solid rgba(106,65,31,.64);
+  background:
+    repeating-linear-gradient(0deg, rgba(94,55,25,.018) 0, rgba(94,55,25,.018) 1px, transparent 1px, transparent 4px),
+    rgba(253,241,207,.95);
+  box-shadow: 0 18px 55px rgba(0,0,0,.34);
+}
+.recipe-list-heading { text-align: center; margin-bottom: 28px; }
+.recipe-list-heading .eyebrow { color: #855036; }
+.recipe-list-heading h2 { font-size: clamp(38px, 5vw, 58px); margin: 7px 0 10px; color: #6c281c; }
+.recipe-list-heading p { margin: 0 auto; max-width: 650px; font-size: 18px; line-height: 1.55; color: #765744; }
+.recipe-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 23px; }
+.recipe-card {
+  display: flex; flex-direction: column; overflow: hidden; text-decoration: none;
+  border-radius: 18px; border: 1px solid rgba(102,62,29,.32); background: #fff8e5;
+  box-shadow: 0 10px 24px rgba(77,45,24,.16); transition: transform .18s ease, box-shadow .18s ease;
+}
+.recipe-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(77,45,24,.24); }
+.recipe-thumb { aspect-ratio: 2/3; overflow: hidden; background: #e7d7ad; }
+.recipe-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.recipe-card strong { padding: 17px 14px 19px; text-align: center; font-size: 21px; line-height: 1.18; color: #5f2b20; }
+.empty-recipes { padding: 50px 24px; text-align: center; font-size: 20px; line-height: 1.6; color: #75533f; border: 1px dashed rgba(106,65,31,.45); border-radius: 18px; }
+.recipe-footer { background: rgba(49,29,16,.96); }
+
+/* Отделна чиста страница за рецептата */
+.recipe-detail-wrap { width: min(1180px, calc(100% - 24px)); margin: auto; padding: 48px 0 72px; }
+.recipe-detail-card {
+  padding: clamp(22px, 4vw, 48px); text-align: center; border-radius: 28px;
+  background: rgba(253,240,204,.97); border: 1px solid rgba(98,59,29,.62); box-shadow: 0 24px 70px rgba(0,0,0,.42);
+}
+.recipe-detail-card h1 { margin: 8px 0 26px; font-size: clamp(40px, 6vw, 66px); color: #6e291d; }
+.recipe-back { display: inline-block; margin-bottom: 22px; color: #6c3a24; font-weight: 700; }
+.recipe-full-frame { width: min(1024px, 100%); margin: auto; padding: 10px; background: #e8d3a0; border: 1px solid rgba(102,62,29,.46); box-shadow: 0 13px 35px rgba(55,32,18,.2); }
+.recipe-full-frame img { display: block; width: 100%; height: auto; }
+.recipe-back-bottom { margin-top: 28px; border-radius: 999px; }
+
+@media (max-width: 980px) {
+  .portal-card { min-height: 610px; }
+  .recipes-layout { grid-template-columns: 220px minmax(0,1fr); }
+  .recipe-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .portal-grid { grid-template-columns: 1fr; }
+  .portal-card { min-height: 640px; }
+  .portal-card-copy { padding: 31px 22px; }
+  .recipes-layout { grid-template-columns: 1fr; width: min(100% - 18px, 680px); }
+  .recipe-sidebar {
+    position: static; grid-template-columns: repeat(2, minmax(0,1fr)); padding: 16px; gap: 10px;
+  }
+  .sidebar-title, .sidebar-divider { grid-column: 1 / -1; }
+  .flour-button { min-height: 54px; font-size: 17px; padding: 10px 12px; }
+  .recipe-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+  .recipe-card strong { font-size: 18px; padding: 13px 9px 15px; }
+  .recipe-content { padding: 24px 14px; }
+}
+@media (max-width: 440px) {
+  .portal-card { min-height: 535px; }
+  .recipe-sidebar { grid-template-columns: 1fr; }
+  .sidebar-title, .sidebar-divider { grid-column: auto; }
+  .recipe-grid { grid-template-columns: 1fr; max-width: 380px; margin: auto; }
+}
