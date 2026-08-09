@@ -437,3 +437,123 @@ button, a.button { font: inherit; }
   .sidebar-title, .sidebar-divider { grid-column: auto; }
   .recipe-grid { grid-template-columns: 1fr; max-width: 380px; margin: auto; }
 }
+
+/* Reader v8: запазване на прогрес, бърза навигация и мобилно четене */
+.reader-progress {
+  height: 4px;
+  background: rgba(255,255,255,.10);
+  overflow: hidden;
+}
+.reader-progress span {
+  display: block;
+  width: 1.5%;
+  height: 100%;
+  background: #d4ad69;
+  transition: width .15s linear;
+}
+.chapter-jump {
+  position: sticky;
+  top: 68px;
+  z-index: 24;
+  width: min(860px, calc(100% - 28px));
+  margin: 12px auto -22px;
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  color: #f4e4c2;
+  background: rgba(55,34,21,.94);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  backdrop-filter: blur(8px);
+}
+.chapter-jump label,
+#readingProgressText { font-size: 13px; white-space: nowrap; opacity: .92; }
+.chapter-jump select {
+  min-width: 0;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 32px 6px 10px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 7px;
+  color: #fff1d0;
+  background: #4a2e1d;
+  font: inherit;
+}
+.chapter-jump select option { background: #fff6df; color: #2f2118; }
+.font-tools { display: flex; align-items: center; gap: 5px; }
+.font-reset { min-width: 38px; padding-inline: 7px; font-size: 12px; opacity: .88; }
+.reader-nav .button {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+}
+
+@media (max-width: 820px) {
+  .reader-toolbar { position: sticky; }
+  .toolbar-inner {
+    width: calc(100% - 12px);
+    min-height: 56px;
+    gap: 6px;
+  }
+  .toolbar-group { gap: 5px; flex-wrap: nowrap; }
+  .toolbtn { min-width: 38px; min-height: 38px; padding: 7px 9px; }
+  #shareBtn { display: none; }
+  .chapter-jump {
+    top: 60px;
+    width: calc(100% - 12px);
+    margin-top: 7px;
+    margin-bottom: -14px;
+    grid-template-columns: 1fr auto;
+    padding: 7px 8px;
+  }
+  .chapter-jump label { display: none; }
+  .chapter-jump select { min-height: 40px; font-size: 14px; }
+  #readingProgressText { font-size: 12px; }
+  .reader-wrap { padding: 28px 6px 48px; }
+  .reader-paper {
+    width: 100%;
+    padding: 30px clamp(17px, 5vw, 32px) 42px;
+    border-left-width: 0;
+    border-right-width: 0;
+    box-shadow: 0 14px 35px rgba(0,0,0,.28), inset 0 0 28px rgba(95,59,27,.07);
+  }
+  .reader-paper::before { inset: 7px; }
+  .reader-header { padding-bottom: 20px; margin-bottom: 22px; }
+  .reader-header h1 { font-size: clamp(27px, 8vw, 38px); }
+  .chapter-title { font-size: clamp(23px, 7vw, 29px); line-height: 1.2; }
+  .chapter-subtitle { margin-bottom: 26px; }
+  .reader-text { line-height: 1.72; }
+  .reader-text p { text-indent: 1.15em; margin-bottom: 1em; }
+  .reader-text p:first-child::first-letter { font-size: 3em; }
+  .reader-nav {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 34px;
+  }
+  .reader-nav .button { min-height: 48px; padding: 10px 11px; font-size: 14px; }
+  .reader-nav .toc-middle { grid-column: 1 / -1; grid-row: 1; width: 100%; }
+  .copyright-note { margin-top: 28px; padding: 14px 12px; font-size: 12px; }
+  .toc-panel { padding: 8px; }
+  .toc-card { max-height: 90vh; padding: 18px 14px; border-radius: 10px; }
+  .toc-list button { padding: 12px 10px; font-size: 15px; }
+}
+
+@media (max-width: 430px) {
+  .toolbar-inner { justify-content: space-between; }
+  .toolbar-group:first-child { flex: 0 0 auto; }
+  .toolbar-group:last-child { flex: 1 1 auto; justify-content: flex-end; }
+  .font-reset { display: none; }
+  #tocBtn { padding-inline: 8px; font-size: 13px; }
+  .reader-paper { padding-inline: 16px; }
+  .chapter-jump { grid-template-columns: minmax(0,1fr) auto; }
+  #readingProgressText { max-width: 72px; overflow: hidden; text-overflow: ellipsis; }
+  .reader-nav { grid-template-columns: 1fr; }
+  .reader-nav .toc-middle { grid-column: 1; grid-row: auto; order: 2; }
+  .reader-nav #prevBtn { order: 1; }
+  .reader-nav #nextBtn { order: 3; justify-self: stretch; }
+  .reader-nav .button { width: 100%; }
+}

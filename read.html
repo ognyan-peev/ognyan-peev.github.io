@@ -16,13 +16,23 @@
       <strong class="work-name" id="toolbarTitle">Зареждане…</strong>
     </div>
     <div class="toolbar-group">
-      <button class="toolbtn" id="fontDown" title="Намали шрифта">А−</button>
-      <button class="toolbtn" id="fontUp" title="Увеличи шрифта">А+</button>
+      <div class="font-tools" aria-label="Размер на текста">
+        <button class="toolbtn" id="fontDown" title="Намали шрифта" aria-label="Намали шрифта">А−</button>
+        <button class="toolbtn font-reset" id="fontReset" title="Стандартен размер" aria-label="Стандартен размер"><span id="fontSizeLabel">20</span></button>
+        <button class="toolbtn" id="fontUp" title="Увеличи шрифта" aria-label="Увеличи шрифта">А+</button>
+      </div>
       <button class="toolbtn" id="shareBtn" title="Сподели страницата">Сподели</button>
       <button class="toolbtn" id="tocBtn" title="Съдържание">Съдържание</button>
     </div>
   </div>
+  <div class="reader-progress" aria-hidden="true"><span id="readingProgressBar"></span></div>
 </header>
+
+<div class="chapter-jump">
+  <label for="chapterSelect" id="chapterCounter">Раздел</label>
+  <select id="chapterSelect" aria-label="Премини към глава"></select>
+  <span id="readingProgressText">0%</span>
+</div>
 
 <main class="reader-wrap">
   <article class="reader-paper">

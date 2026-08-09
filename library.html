@@ -128,8 +128,15 @@
 </div>
 <script>
 document.querySelectorAll('a[href^="read.html?work="]').forEach(link => {
+  const work = new URL(link.href, location.href).searchParams.get('work');
+  try {
+    const saved = JSON.parse(localStorage.getItem(`reader_state_${work}`) || 'null');
+    if (saved && (Number(saved.section) > 0 || Number(saved.ratio) > 0.03)) {
+      link.textContent = 'Продължи четенето';
+      link.title = 'Ще се отвори последното запазено място';
+    }
+  } catch (e) {}
   link.addEventListener('click', () => {
-    const work = new URL(link.href).searchParams.get('work');
     window.siteAnalytics?.event('open_work', {work});
   });
 });

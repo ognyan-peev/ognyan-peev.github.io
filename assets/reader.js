@@ -1,20 +1,100 @@
-
 (() => {
   const params = new URLSearchParams(location.search);
   const work = params.get("work") || "blue-eyes";
-  let section = Math.max(0, parseInt(params.get("section") || localStorage.getItem("progress_" + work) || "0", 10));
+  const explicitSection = params.has("section");
+  const stateKey = `reader_state_${work}`;
+  const legacyKey = `progress_${work}`;
   let data = null;
+  let section = 0;
+  let size = parseInt(localStorage.getItem("reader_size") || "20", 10);
+  let pendingRestoreRatio = 0;
+  let scrollSaveTimer = null;
+  let restoring = false;
 
   const $ = id => document.getElementById(id);
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
   const notify = msg => {
     $("notice").textContent = msg;
     $("notice").classList.add("show");
-    setTimeout(() => $("notice").classList.remove("show"), 2200);
+    clearTimeout(notify.timer);
+    notify.timer = setTimeout(() => $("notice").classList.remove("show"), 2400);
   };
 
-  function setSection(index, push = true) {
+  function readSavedState() {
+    try {
+      const raw = localStorage.getItem(stateKey);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        return {
+          section: Number.isFinite(Number(saved.section)) ? Number(saved.section) : 0,
+          ratio: Number.isFinite(Number(saved.ratio)) ? clamp(Number(saved.ratio), 0, 1) : 0
+        };
+      }
+    } catch (e) {}
+    return {
+      section: Math.max(0, parseInt(localStorage.getItem(legacyKey) || "0", 10) || 0),
+      ratio: 0
+    };
+  }
+
+  function textScrollRatio() {
+    const text = $("readerText");
+    if (!text || !data) return 0;
+    const start = text.getBoundingClientRect().top + window.scrollY - 90;
+    const end = text.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 80;
+    if (end <= start) return window.scrollY > start ? 1 : 0;
+    return clamp((window.scrollY - start) / (end - start), 0, 1);
+  }
+
+  function saveState() {
+    if (!data || restoring) return;
+    const ratio = textScrollRatio();
+    const payload = { section, ratio, updatedAt: Date.now() };
+    localStorage.setItem(stateKey, JSON.stringify(payload));
+    localStorage.setItem(legacyKey, String(section));
+    updateProgressUI(ratio);
+  }
+
+  function updateProgressUI(ratio = textScrollRatio()) {
     if (!data) return;
-    section = Math.max(0, Math.min(index, data.sections.length - 1));
+    const chapterNumber = section + 1;
+    const total = data.sections.length;
+    const chapterPercent = Math.round(clamp(ratio, 0, 1) * 100);
+    const totalRatio = clamp((section + ratio) / total, 0, 1);
+    $("readingProgressBar").style.width = `${Math.max(1.5, totalRatio * 100)}%`;
+    $("readingProgressText").textContent = `Раздел ${chapterNumber} от ${total} • ${chapterPercent}%`;
+  }
+
+  function restoreScroll(ratio) {
+    const r = clamp(Number(ratio) || 0, 0, 1);
+    if (r <= 0.015) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      updateProgressUI(0);
+      return;
+    }
+    restoring = true;
+    const doRestore = () => {
+      const text = $("readerText");
+      const start = text.getBoundingClientRect().top + window.scrollY - 90;
+      const end = text.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 80;
+      const target = end > start ? start + (end - start) * r : start;
+      window.scrollTo({ top: Math.max(0, target), behavior: "auto" });
+      updateProgressUI(r);
+      restoring = false;
+      if (!explicitSection) notify("Продължавате от запазеното място.");
+    };
+    requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(doRestore, 60)));
+  }
+
+  function chapterLabel(s, i) {
+    const fallback = `Част ${i + 1}`;
+    return (s.title || "").trim() || fallback;
+  }
+
+  function setSection(index, options = {}) {
+    if (!data) return;
+    const { push = true, restoreRatio = 0, smooth = true } = options;
+    section = clamp(index, 0, data.sections.length - 1);
     const s = data.sections[section];
     $("chapterTitle").textContent = s.title || "";
     $("chapterSubtitle").textContent = s.subtitle || "";
@@ -30,20 +110,40 @@
 
     $("prevBtn").disabled = section === 0;
     $("nextBtn").disabled = section === data.sections.length - 1;
-    localStorage.setItem("progress_" + work, String(section));
+    $("chapterSelect").value = String(section);
+    $("chapterCounter").textContent = `Раздел ${section + 1} от ${data.sections.length}`;
+
+    const nextSection = data.sections[section + 1];
+    $("nextBtn").textContent = nextSection ? `Следваща: ${chapterLabel(nextSection, section + 1)} →` : "Край";
+    const prevSection = data.sections[section - 1];
+    $("prevBtn").textContent = prevSection ? `← ${chapterLabel(prevSection, section - 1)}` : "← Предишна";
+
+    localStorage.setItem(legacyKey, String(section));
+    localStorage.setItem(stateKey, JSON.stringify({ section, ratio: restoreRatio || 0, updatedAt: Date.now() }));
 
     if (push) {
       const u = new URL(location.href);
       u.searchParams.set("section", section);
       history.replaceState({}, "", u);
     }
-    window.siteAnalytics?.event('view_section', { work, section_number: section + 1, section_title: s.title || '' });
-    scrollTo({top: 0, behavior: "smooth"});
+
+    window.siteAnalytics?.event('view_section', {
+      work,
+      section_number: section + 1,
+      section_title: s.title || ''
+    });
+
+    if (restoreRatio > 0) {
+      restoreScroll(restoreRatio);
+    } else {
+      updateProgressUI(0);
+      window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+    }
   }
 
   function initialize() {
     data = window.WORK_DATA;
-    if (!data) {
+    if (!data || !Array.isArray(data.sections) || !data.sections.length) {
       $("readerText").textContent = "Произведението не можа да бъде заредено.";
       return;
     }
@@ -54,15 +154,32 @@
     $("workType").textContent = data.type;
     $("workAuthor").textContent = data.author;
 
-    section = Math.min(section, data.sections.length - 1);
+    const saved = readSavedState();
+    if (explicitSection) {
+      section = clamp(parseInt(params.get("section") || "0", 10) || 0, 0, data.sections.length - 1);
+      pendingRestoreRatio = saved.section === section ? saved.ratio : 0;
+    } else {
+      section = clamp(saved.section, 0, data.sections.length - 1);
+      pendingRestoreRatio = saved.ratio;
+    }
+
     const toc = $("tocList");
+    const select = $("chapterSelect");
     data.sections.forEach((s, i) => {
+      const label = s.subtitle ? `${chapterLabel(s, i)} — ${s.subtitle}` : chapterLabel(s, i);
+
       const b = document.createElement("button");
-      b.textContent = s.subtitle ? `${s.title} — ${s.subtitle}` : s.title;
+      b.textContent = label;
       b.addEventListener("click", () => { setSection(i); closeToc(); });
       toc.appendChild(b);
+
+      const opt = document.createElement("option");
+      opt.value = String(i);
+      opt.textContent = `${i + 1}. ${label}`;
+      select.appendChild(opt);
     });
-    setSection(section, false);
+
+    setSection(section, { push: false, restoreRatio: pendingRestoreRatio, smooth: false });
 
     // Отчита читател само след общо 5 минути активно време на видима страница.
     let activeSeconds = 0;
@@ -84,13 +201,12 @@
   const script = document.createElement("script");
   script.src = `assets/data/${work}.js`;
   script.onload = initialize;
-  script.onerror = () => {
-    $("readerText").textContent = "Произведението не можа да бъде заредено.";
-  };
+  script.onerror = () => { $("readerText").textContent = "Произведението не можа да бъде заредено."; };
   document.head.appendChild(script);
 
   $("prevBtn").addEventListener("click", () => setSection(section - 1));
   $("nextBtn").addEventListener("click", () => setSection(section + 1));
+  $("chapterSelect").addEventListener("change", e => setSection(parseInt(e.target.value, 10) || 0));
 
   const openToc = () => $("tocPanel").classList.add("open");
   const closeToc = () => $("tocPanel").classList.remove("open");
@@ -99,15 +215,26 @@
   $("closeToc").addEventListener("click", closeToc);
   $("tocPanel").addEventListener("click", e => { if (e.target === $("tocPanel")) closeToc(); });
 
-  let size = parseInt(localStorage.getItem("reader_size") || "20", 10);
   const applySize = () => {
-    size = Math.max(17, Math.min(28, size));
+    size = clamp(size, 17, 28);
     document.documentElement.style.setProperty("--reader-size", size + "px");
     localStorage.setItem("reader_size", String(size));
+    $("fontSizeLabel").textContent = `${size}`;
+    if (data) setTimeout(saveState, 80);
   };
   applySize();
   $("fontDown").addEventListener("click", () => { size--; applySize(); });
+  $("fontReset").addEventListener("click", () => { size = 20; applySize(); });
   $("fontUp").addEventListener("click", () => { size++; applySize(); });
+
+  window.addEventListener("scroll", () => {
+    if (!data || restoring) return;
+    updateProgressUI();
+    clearTimeout(scrollSaveTimer);
+    scrollSaveTimer = setTimeout(saveState, 180);
+  }, { passive: true });
+  window.addEventListener("pagehide", saveState);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) saveState(); });
 
   $("shareBtn").addEventListener("click", async () => {
     const shareData = {
@@ -147,5 +274,11 @@
       notify("Тази команда е изключена в страницата за четене.");
     }
     if (e.key === "Escape") closeToc();
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key === "ArrowRight" && document.activeElement.tagName !== "SELECT") {
+      if (data && section < data.sections.length - 1) setSection(section + 1);
+    }
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key === "ArrowLeft" && document.activeElement.tagName !== "SELECT") {
+      if (data && section > 0) setSection(section - 1);
+    }
   });
 })();
