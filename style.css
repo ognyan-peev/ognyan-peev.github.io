@@ -234,3 +234,24 @@ button, a.button { font: inherit; }
 @media (max-width:820px) {
   #romani .shelf, #razkazi .shelf { grid-template-columns:1fr !important; }
 }
+
+/* Подредба на романите по поредици */
+.series-list{display:grid;gap:42px}
+.series-block{border-top:1px solid rgba(93,61,39,.24);padding-top:24px}
+.series-block:first-child{border-top:0;padding-top:0}
+.series-heading{margin:0 0 20px}
+.series-heading h3{margin:3px 0 0;font-family:Georgia,serif;font-size:clamp(1.45rem,3vw,2rem);color:#3c2b20}
+.series-kicker{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#805034;font-weight:700}
+.series-books{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+@media (max-width:620px){.series-list{gap:30px}.series-books{grid-template-columns:1fr}}
+
+.comments-hero {
+  padding: 72px 24px 34px;
+  background: linear-gradient(135deg, #17232b, #263b45);
+  color: #f7ead0;
+}
+
+.comments-inner {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}

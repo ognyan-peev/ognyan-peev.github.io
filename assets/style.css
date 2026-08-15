@@ -557,3 +557,97 @@ button, a.button { font: inherit; }
   .reader-nav #nextBtn { order: 3; justify-self: stretch; }
   .reader-nav .button { width: 100%; }
 }
+
+/* Подредба на романите по поредици */
+.series-list{display:grid;gap:42px}
+.series-block{border-top:1px solid rgba(93,61,39,.24);padding-top:24px}
+.series-block:first-child{border-top:0;padding-top:0}
+.series-heading{margin:0 0 20px}
+.series-heading h3{margin:3px 0 0;font-family:Georgia,serif;font-size:clamp(1.45rem,3vw,2rem);color:#3c2b20}
+.series-kicker{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#805034;font-weight:700}
+.series-books{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+@media (max-width:620px){.series-list{gap:30px}.series-books{grid-template-columns:1fr}}
+
+.comments-hero {
+  padding: 72px 24px 34px;
+  background: linear-gradient(135deg, #17232b, #263b45);
+  color: #f7ead0;
+}
+
+.comments-inner {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+.comments-hero h1 {
+  margin: 8px 0 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 7vw, 74px);
+}
+
+.comments-hero p {
+  max-width: 760px;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.comments-section {
+  padding: 42px 24px 70px;
+  background: #f3e6c8;
+}
+
+.comments-panel {
+  box-sizing: border-box;
+  padding: clamp(24px, 5vw, 48px);
+  border-radius: 18px;
+  background: #fffaf0;
+  box-shadow: 0 14px 38px rgba(40, 31, 22, .14);
+}
+
+.comments-guidance h2 {
+  margin-top: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: #34261c;
+}
+
+.comments-guidance p,
+.comments-consent p,
+.comments-setup p {
+  line-height: 1.65;
+}
+
+.comments-consent,
+.comments-setup {
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px solid rgba(128, 80, 52, .25);
+  border-radius: 12px;
+  background: #f7edd8;
+}
+
+.comments-service-note {
+  margin: 22px 0;
+  color: #685749;
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
+.comments-consent .button {
+  border: 0;
+  cursor: pointer;
+}
+
+#disqus_thread:not(:empty) {
+  margin-top: 30px;
+}
+
+@media (max-width: 640px) {
+  .comments-hero {
+    padding-top: 48px;
+  }
+
+  .comments-section {
+    padding: 24px 14px 44px;
+  }
+}

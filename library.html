@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="bg">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="Романи и разкази от Огнян Пеев. Онлайн библиотека за удобно четене." name="description"/>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<meta content="Романи и разкази от Огнян Пеев. Онлайн библиотека за удобно четене." name="description">
 <title>Романи и разкази | Огнян Пеев</title>
-<link href="assets/style.css" rel="stylesheet"/>
-<script defer="" src="assets/analytics.js"></script>
+<link href="assets/style.css" rel="stylesheet">
+<script defer src="assets/analytics.js"></script>
 </head>
 <body class="library-page">
 <div class="site-shell">
@@ -19,13 +18,13 @@
 <a href="#romani">Романи</a>
 <a href="#razkazi">Разкази</a>
 <a href="recipes.html">Семейни рецепти</a>
-<a href="#avtor">За автора</a>
+<a href="comments.html">Коментари</a><a href="#avtor">За автора</a>
 </div>
 </nav>
 </header>
 <section class="hero">
 <div class="hero-card">
-<img alt="Огнян Пеев" class="author-photo" src="assets/images/author-new.jpg" loading="lazy"/>
+<img alt="Огнян Пеев" class="author-photo" src="assets/images/author-new.jpg" loading="lazy">
 <div>
 <div class="eyebrow">Романи и разкази за онлайн четене</div>
 <h1>Романи и разкази</h1>
@@ -40,9 +39,13 @@
 <h2>Романи</h2>
 <p>Истории с повече пространство, повече герои и време да останете с тях.</p>
 </div>
-<div class="shelf novels-shelf">
+<div class="series-list">
+<section class="series-block"><div class="series-heading">
+<span class="series-kicker">Поредица</span><h3>„ЦАРЕ“</h3>
+</div>
+<div class="shelf novels-shelf series-books">
 <article class="book-card">
-<div class="cover-wrap"><img alt="Корица на ЦАРЕ" src="assets/images/kings.jpg" loading="lazy"/></div>
+<div class="cover-wrap"><img alt="Корица на ЦАРЕ" src="assets/images/kings.jpg" loading="lazy"></div>
 <div class="book-info">
 <span class="book-type">Роман</span>
 <h3>ЦАРЕ</h3>
@@ -50,16 +53,8 @@
 <a class="button" href="read.html?work=kings">Отвори романа</a>
 </div>
 </article>
-<article class="book-card">
-<div class="cover-wrap"><img alt="Корица на Син, син като очите ѝ" src="assets/images/blue-eyes.jpg" loading="lazy"/></div>
-<div class="book-info">
-<span class="book-type">Роман</span>
-<h3>СИН, СИН КАТО ОЧИТЕ Ѝ</h3>
-<p>Съвременен роман за любов, власт, богатство и изборите, които променят човека.</p>
-<a class="button" href="read.html?work=blue-eyes">Отвори романа</a>
-</div>
-</article><article class="book-card" data-work="kings-war">
-<div class="cover-wrap"><img alt="Корица на ЦАРЕ: Време за война, любов и предателства" src="assets/images/kings-war.jpg" loading="lazy"/></div>
+<article class="book-card" data-work="kings-war">
+<div class="cover-wrap"><img alt="Корица на ЦАРЕ: Време за война, любов и предателства" src="assets/images/kings-war.jpg" loading="lazy"></div>
 <div class="book-info">
 <span class="book-type">Роман</span>
 <h3>ЦАРЕ: ВРЕМЕ ЗА ВОЙНА, ЛЮБОВ И ПРЕДАТЕЛСТВА</h3>
@@ -68,8 +63,20 @@
 <a class="button" href="read.html?work=kings-war">Отвори романа</a>
 </div>
 </article>
-<article class="book-card sequel-card">
-<div class="cover-wrap"><img alt="Корица на Любов моя, трябва да ти кажа нещо" src="assets/images/love-my.jpg" loading="lazy"/></div>
+</div></section><section class="series-block"><div class="series-heading">
+<span class="series-kicker">Поредица</span><h3>Мартин и Клара</h3>
+</div>
+<div class="shelf novels-shelf series-books">
+<article class="book-card">
+<div class="cover-wrap"><img alt="Корица на Син, син като очите ѝ" src="assets/images/blue-eyes.jpg" loading="lazy"></div>
+<div class="book-info">
+<span class="book-type">Роман</span>
+<h3>СИН, СИН КАТО ОЧИТЕ Ѝ</h3>
+<p>Съвременен роман за любов, власт, богатство и изборите, които променят човека.</p>
+<a class="button" href="read.html?work=blue-eyes">Отвори романа</a>
+</div>
+</article><article class="book-card sequel-card">
+<div class="cover-wrap"><img alt="Корица на Любов моя, трябва да ти кажа нещо" src="assets/images/love-my.jpg" loading="lazy"></div>
 <div class="book-info">
 <span class="book-type">Роман</span>
 <h3>ЛЮБОВ МОЯ, ТРЯБВА ДА ТИ КАЖА НЕЩО</h3>
@@ -78,6 +85,17 @@
 <a class="button" href="read.html?work=love-my">Отвори романа</a>
 </div>
 </article>
+<article class="book-card sequel-card" data-work="run-friend">
+      <div class="cover-wrap"><img alt="Корица на Бягай, Приятелю, Бягай" src="assets/images/run-friend.webp" loading="lazy"></div>
+      <div class="book-info">
+        <span class="book-type">Роман</span>
+        <h3>БЯГАЙ, ПРИЯТЕЛЮ, БЯГАЙ</h3>
+        <p class="series-note">Продължение на „ЛЮБОВ МОЯ, ТРЯБВА ДА ТИ КАЖА НЕЩО“.</p>
+        <p>След нападението над Айхенхоф Мартин, Андрей и Олег тръгват по следите на човек, превърнал стар дълг в заплаха за семейството.</p>
+        <a class="button" href="read.html?work=run-friend">Отвори романа</a>
+      </div>
+    </article>
+</div></section>
 </div>
 </div>
 </section>
@@ -89,7 +107,7 @@
 </div>
 <div class="shelf" style="grid-template-columns:repeat(2,minmax(0,360px));justify-content:center">
 <article class="book-card">
-<div class="cover-wrap"><img alt="Корица на Асистентът" src="assets/images/assistant.jpg" loading="lazy"/></div>
+<div class="cover-wrap"><img alt="Корица на Асистентът" src="assets/images/assistant.jpg" loading="lazy"></div>
 <div class="book-info">
 <span class="book-type">Разказ</span>
 <h3>АСИСТЕНТЪТ</h3>
@@ -98,7 +116,7 @@
 </div>
 </article>
 <article class="book-card">
-<div class="cover-wrap"><img alt="Корица на Сълзите на боговете" src="assets/images/tears.jpg" loading="lazy"/></div>
+<div class="cover-wrap"><img alt="Корица на Сълзите на боговете" src="assets/images/tears.jpg" loading="lazy"></div>
 <div class="book-info">
 <span class="book-type">Разказ</span>
 <h3>СЪЛЗИТЕ НА БОГОВЕТЕ</h3>
@@ -111,7 +129,7 @@
 </section>
 <section class="paper-section" id="avtor">
 <div class="section-inner about-grid">
-<img alt="Огнян Пеев" src="assets/images/author-new.jpg" loading="lazy"/>
+<img alt="Огнян Пеев" src="assets/images/author-new.jpg" loading="lazy">
 <div class="about-text">
 <div class="eyebrow" style="color:#805034">За автора</div>
 <h2>Огнян Пеев</h2>
@@ -122,7 +140,7 @@
 </section>
 </main>
 <footer class="footer">
-  © Огнян Пеев. Всички права запазени.<br/>
+  © Огнян Пеев. Всички права запазени.<br>
   Създадено от Огнян Пеев и ChatGPT
 </footer>
 </div>
