@@ -325,6 +325,36 @@ button, a.button { font: inherit; }
 .library-page .hero-card { border-radius: 28px; background: rgba(40,25,17,.79); }
 .library-page .book-card { border-radius: 20px; }
 .library-page .button { border-radius: 999px; }
+.comments-spotlight-wrap {
+  max-width: none !important;
+  margin: 24px 0 0 !important;
+  text-align: center;
+}
+.comments-spotlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 28px;
+  border: 1px solid #ffe0a3;
+  border-radius: 999px;
+  background: #e8b85f;
+  color: #2b1c12;
+  box-shadow: 0 8px 20px rgba(0,0,0,.28);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.comments-spotlight:hover,
+.comments-spotlight:focus-visible {
+  transform: translateY(-2px);
+  background: #f3c975;
+  box-shadow: 0 11px 24px rgba(0,0,0,.34);
+}
+@media (max-width: 620px) {
+  .comments-spotlight { width: 100%; box-sizing: border-box; }
+}
 
 /* ===== Семейни рецепти ===== */
 .recipes-page, .recipe-detail-page {
