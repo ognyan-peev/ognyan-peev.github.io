@@ -1,15 +1,22 @@
 (() => {
   const params = new URLSearchParams(location.search);
-  const work = params.get("work") || "blue-eyes";
+  const requestedWork = params.get("work") || "blue-eyes";
+  const work = /^[a-z0-9-]+$/.test(requestedWork) ? requestedWork : "blue-eyes";
+  let storageUnavailable = false;
+  const storage = {
+    getItem(key) { try { return localStorage.getItem(key); } catch (e) { storageUnavailable = true; return null; } },
+    setItem(key, value) { try { localStorage.setItem(key, value); } catch (e) { storageUnavailable = true; } }
+  };
   const explicitSection = params.has("section");
   const stateKey = `reader_state_${work}`;
   const legacyKey = `progress_${work}`;
   let data = null;
   let section = 0;
-  let size = parseInt(localStorage.getItem("reader_size") || "20", 10);
+  let size = parseInt(storage.getItem("reader_size") || "20", 10) || 20;
   let pendingRestoreRatio = 0;
   let scrollSaveTimer = null;
   let restoring = false;
+  let restoreVersion = 0;
 
   const $ = id => document.getElementById(id);
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
@@ -22,7 +29,7 @@
 
   function readSavedState() {
     try {
-      const raw = localStorage.getItem(stateKey);
+      const raw = storage.getItem(stateKey);
       if (raw) {
         const saved = JSON.parse(raw);
         return {
@@ -32,7 +39,7 @@
       }
     } catch (e) {}
     return {
-      section: Math.max(0, parseInt(localStorage.getItem(legacyKey) || "0", 10) || 0),
+      section: Math.max(0, parseInt(storage.getItem(legacyKey) || "0", 10) || 0),
       ratio: 0
     };
   }
@@ -50,8 +57,8 @@
     if (!data || restoring) return;
     const ratio = textScrollRatio();
     const payload = { section, ratio, updatedAt: Date.now() };
-    localStorage.setItem(stateKey, JSON.stringify(payload));
-    localStorage.setItem(legacyKey, String(section));
+    storage.setItem(stateKey, JSON.stringify(payload));
+    storage.setItem(legacyKey, String(section));
     updateProgressUI(ratio);
   }
 
@@ -65,15 +72,19 @@
     $("readingProgressText").textContent = `Раздел ${chapterNumber} от ${total} • ${chapterPercent}%`;
   }
 
-  function restoreScroll(ratio) {
+  function restoreScroll(ratio, announce = true) {
+    const version = ++restoreVersion;
+    clearTimeout(scrollSaveTimer);
     const r = clamp(Number(ratio) || 0, 0, 1);
     if (r <= 0.015) {
       window.scrollTo({ top: 0, behavior: "auto" });
       updateProgressUI(0);
+      restoring = false;
       return;
     }
     restoring = true;
     const doRestore = () => {
+      if (version !== restoreVersion) return;
       const text = $("readerText");
       const start = text.getBoundingClientRect().top + window.scrollY - 90;
       const end = text.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 80;
@@ -81,9 +92,11 @@
       window.scrollTo({ top: Math.max(0, target), behavior: "auto" });
       updateProgressUI(r);
       restoring = false;
-      if (!explicitSection) notify("Продължавате от запазеното място.");
+      if (announce && !explicitSection) notify("Продължавате от запазеното място.");
     };
-    requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(doRestore, 60)));
+    Promise.resolve(document.fonts?.ready).then(() => {
+      requestAnimationFrame(() => requestAnimationFrame(doRestore));
+    });
   }
 
   function chapterLabel(s, i) {
@@ -93,7 +106,10 @@
 
   function setSection(index, options = {}) {
     if (!data) return;
-    const { push = true, restoreRatio = 0, smooth = true } = options;
+    const { push = true, restoreRatio = 0 } = options;
+    clearTimeout(scrollSaveTimer);
+    ++restoreVersion;
+    restoring = false;
     section = clamp(index, 0, data.sections.length - 1);
     const s = data.sections[section];
     $("chapterTitle").textContent = s.title || "";
@@ -118,8 +134,8 @@
     const prevSection = data.sections[section - 1];
     $("prevBtn").textContent = prevSection ? `← ${chapterLabel(prevSection, section - 1)}` : "← Предишна";
 
-    localStorage.setItem(legacyKey, String(section));
-    localStorage.setItem(stateKey, JSON.stringify({ section, ratio: restoreRatio || 0, updatedAt: Date.now() }));
+    storage.setItem(legacyKey, String(section));
+    storage.setItem(stateKey, JSON.stringify({ section, ratio: restoreRatio || 0, updatedAt: Date.now() }));
 
     if (push) {
       const u = new URL(location.href);
@@ -137,7 +153,7 @@
       restoreScroll(restoreRatio);
     } else {
       updateProgressUI(0);
-      window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
   }
 
@@ -180,6 +196,7 @@
     });
 
     setSection(section, { push: false, restoreRatio: pendingRestoreRatio, smooth: false });
+    if (storageUnavailable) notify("Браузърът не позволява запазване на мястото за четене.");
 
     // Отчита читател само след общо 5 минути активно време на видима страница.
     let activeSeconds = 0;
@@ -216,11 +233,15 @@
   $("tocPanel").addEventListener("click", e => { if (e.target === $("tocPanel")) closeToc(); });
 
   const applySize = () => {
+    const ratio = data ? textScrollRatio() : 0;
     size = clamp(size, 17, 28);
     document.documentElement.style.setProperty("--reader-size", size + "px");
-    localStorage.setItem("reader_size", String(size));
+    storage.setItem("reader_size", String(size));
     $("fontSizeLabel").textContent = `${size}`;
-    if (data) setTimeout(saveState, 80);
+    if (data) {
+      restoreScroll(ratio, false);
+      storage.setItem(stateKey, JSON.stringify({ section, ratio, updatedAt: Date.now() }));
+    }
   };
   applySize();
   $("fontDown").addEventListener("click", () => { size--; applySize(); });
@@ -253,8 +274,9 @@
 
   ["copy", "cut", "dragstart", "selectstart"].forEach(ev =>
     document.addEventListener(ev, e => {
-      if (e.target.closest(".reader-text")) {
+      if (e.target.closest?.(".reader-paper") || ev === "copy" || ev === "cut") {
         e.preventDefault();
+        e.clipboardData?.setData("text/plain", "");
         notify("Текстът е предоставен само за четене.");
       }
     })

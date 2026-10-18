@@ -14,6 +14,7 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+html:has(body.reader-page) { scroll-behavior: auto; }
 body {
   margin: 0;
   color: var(--ink);
@@ -484,6 +485,10 @@ button, a.button { font: inherit; }
 .series-heading h3{margin:3px 0 0;font-family:Georgia,serif;font-size:clamp(1.45rem,3vw,2rem);color:#3c2b20}
 .series-kicker{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#805034;font-weight:700}
 .series-books{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.series-books .sequel-card{grid-column:auto}
+.series-books .book-info p{flex:0}
+.series-books .book-info>.button{margin-top:auto}
+.reader-paper{-webkit-touch-callout:none}
 @media (max-width:620px){.series-list{gap:30px}.series-books{grid-template-columns:1fr}}
 
 .comments-hero {

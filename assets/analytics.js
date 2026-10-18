@@ -2,6 +2,11 @@
   const MEASUREMENT_ID = "G-CK8012PBLQ";
   const CONSENT_KEY = "ognyan_analytics_consent";
   let loaded = false;
+  let sessionConsent = null;
+  function getConsent() {
+    try { return localStorage.getItem(CONSENT_KEY) || sessionConsent; }
+    catch (e) { return sessionConsent; }
+  }
 
   function loadAnalytics() {
     if (loaded) return;
@@ -18,7 +23,8 @@
   }
 
   function setConsent(value) {
-    localStorage.setItem(CONSENT_KEY, value);
+    sessionConsent = value;
+    try { localStorage.setItem(CONSENT_KEY, value); } catch (e) {}
     document.getElementById('cookieBanner')?.remove();
     if (value === 'accepted') loadAnalytics();
   }
@@ -41,13 +47,13 @@
     document.getElementById('cookieReject').addEventListener('click', () => setConsent('rejected'));
   }
 
-  const consent = localStorage.getItem(CONSENT_KEY);
+  const consent = getConsent();
   if (consent === 'accepted') loadAnalytics();
   else if (!consent) showBanner();
 
   window.siteAnalytics = {
     event(name, params={}) {
-      if (localStorage.getItem(CONSENT_KEY) !== 'accepted') return;
+      if (getConsent() !== 'accepted') return;
       const send = () => window.gtag && gtag('event', name, params);
       if (loaded) send(); else document.addEventListener('analytics-ready', send, {once:true});
     }
