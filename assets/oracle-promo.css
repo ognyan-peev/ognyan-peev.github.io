@@ -1,0 +1,25 @@
+.oracle-promo { scroll-margin-top: 64px; background: #e8d2b8; color: #34261c; }
+.oracle-promo[hidden] { display: none; }
+.oracle-grid { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(0, 1.35fr); gap: clamp(24px, 4vw, 52px); align-items: start; }
+.oracle-poster { display: block; }
+.oracle-poster img { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 12px 30px #39271933; }
+.oracle-copy h2 { font: 700 clamp(26px, 3vw, 38px)/1.2 Georgia, serif; margin: 8px 0 22px; }
+.oracle-copy p, .oracle-copy li { font-size: 17px; line-height: 1.7; }
+.oracle-copy p { margin: 0 0 16px; }
+.oracle-copy .oracle-question { font-size: 21px; font-family: Georgia, serif; }
+.oracle-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 12px; }
+.oracle-actions .button { text-align: center; }
+.oracle-copy .oracle-link-note, .oracle-copy .oracle-credit { font-size: 15px; }
+.oracle-install { padding-top: 8px; }
+.oracle-install h3 { font-size: 22px; margin: 20px 0 14px; }
+.oracle-install ol { padding-left: 25px; margin: 0 0 20px; }
+.oracle-install li { padding-left: 5px; margin-bottom: 12px; }
+.reader-page .oracle-promo { padding: 48px 22px; }
+.reader-page .oracle-grid { max-width: 1160px; margin: auto; }
+@media (max-width: 760px) {
+  .oracle-grid { grid-template-columns: minmax(0, 1fr); }
+  .oracle-poster { max-width: 440px; margin: auto; }
+  .oracle-actions { flex-direction: column; }
+  .oracle-actions .button { width: 100%; box-sizing: border-box; }
+  .reader-page .oracle-promo { padding-inline: 16px; }
+}

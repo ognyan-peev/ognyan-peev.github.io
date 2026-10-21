@@ -14,6 +14,8 @@
   let section = 0;
   let size = parseInt(storage.getItem("reader_size") || "20", 10) || 20;
   let pendingRestoreRatio = 0;
+  let pendingSavedState = null;
+  let navigationVersion = 0;
   let scrollSaveTimer = null;
   let restoring = false;
   let restoreVersion = 0;
@@ -34,7 +36,9 @@
         const saved = JSON.parse(raw);
         return {
           section: Number.isFinite(Number(saved.section)) ? Number(saved.section) : 0,
-          ratio: Number.isFinite(Number(saved.ratio)) ? clamp(Number(saved.ratio), 0, 1) : 0
+          ratio: Number.isFinite(Number(saved.ratio)) ? clamp(Number(saved.ratio), 0, 1) : 0,
+          revision: typeof saved.revision === "string" ? saved.revision : null,
+          anchor: saved.anchor && Number.isInteger(saved.anchor.paragraph) ? saved.anchor : null
         };
       }
     } catch (e) {}
@@ -56,7 +60,7 @@
   function saveState() {
     if (!data || restoring) return;
     const ratio = textScrollRatio();
-    const payload = { section, ratio, updatedAt: Date.now() };
+    const payload = { section, ratio, anchor: window.ReadingPosition?.capture($("readerText")), revision: data.revision || null, updatedAt: Date.now() };
     storage.setItem(stateKey, JSON.stringify(payload));
     storage.setItem(legacyKey, String(section));
     updateProgressUI(ratio);
@@ -72,11 +76,11 @@
     $("readingProgressText").textContent = `Раздел ${chapterNumber} от ${total} • ${chapterPercent}%`;
   }
 
-  function restoreScroll(ratio, announce = true) {
+  function restoreScroll(ratio, announce = true, anchor = null) {
     const version = ++restoreVersion;
     clearTimeout(scrollSaveTimer);
     const r = clamp(Number(ratio) || 0, 0, 1);
-    if (r <= 0.015) {
+    if (r <= 0.015 && !anchor) {
       window.scrollTo({ top: 0, behavior: "auto" });
       updateProgressUI(0);
       restoring = false;
@@ -88,10 +92,11 @@
       const text = $("readerText");
       const start = text.getBoundingClientRect().top + window.scrollY - 90;
       const end = text.getBoundingClientRect().bottom + window.scrollY - window.innerHeight + 80;
-      const target = end > start ? start + (end - start) * r : start;
+      const anchored = window.ReadingPosition?.target(text, anchor);
+      const target = anchored ?? (end > start ? start + (end - start) * r : start);
       window.scrollTo({ top: Math.max(0, target), behavior: "auto" });
-      updateProgressUI(r);
       restoring = false;
+      saveState();
       if (announce && !explicitSection) notify("Продължавате от запазеното място.");
     };
     Promise.resolve(document.fonts?.ready).then(() => {
@@ -104,9 +109,10 @@
     return (s.title || "").trim() || fallback;
   }
 
-  function setSection(index, options = {}) {
+  async function setSection(index, options = {}) {
     if (!data) return;
-    const { push = true, restoreRatio = 0 } = options;
+    const { push = true, restoreRatio = 0, savedState = null } = options;
+    const navigation = ++navigationVersion;
     clearTimeout(scrollSaveTimer);
     ++restoreVersion;
     restoring = false;
@@ -115,6 +121,8 @@
     $("chapterTitle").textContent = s.title || "";
     $("chapterSubtitle").textContent = s.subtitle || "";
     $("chapterSubtitle").style.display = s.subtitle ? "block" : "none";
+    const promo = $("oracle-app");
+    if (promo) promo.hidden = work !== "svetite-zemi" || section !== data.sections.length - 1;
 
     const frag = document.createDocumentFragment();
     s.paragraphs.forEach(text => {
@@ -135,7 +143,8 @@
     $("prevBtn").textContent = prevSection ? `← ${chapterLabel(prevSection, section - 1)}` : "← Предишна";
 
     storage.setItem(legacyKey, String(section));
-    storage.setItem(stateKey, JSON.stringify({ section, ratio: restoreRatio || 0, updatedAt: Date.now() }));
+    // Keep the existing bookmark until restoration has completed.
+    restoring = Boolean(savedState || restoreRatio);
 
     if (push) {
       const u = new URL(location.href);
@@ -149,11 +158,18 @@
       section_title: s.title || ''
     });
 
-    if (restoreRatio > 0) {
-      restoreScroll(restoreRatio);
+    if (restoreRatio > 0 || savedState?.anchor) {
+      let anchor = savedState?.anchor || null;
+      if (savedState && window.ReadingPosition) {
+        anchor = await window.ReadingPosition.migrate(work, data, section, savedState, $("readerText"));
+        if (navigation !== navigationVersion) return;
+      }
+      restoreScroll(restoreRatio, true, anchor);
     } else {
       updateProgressUI(0);
       window.scrollTo({ top: 0, behavior: "auto" });
+      restoring = false;
+      saveState();
     }
   }
 
@@ -171,6 +187,7 @@
     $("workAuthor").textContent = data.author;
 
     const saved = readSavedState();
+    pendingSavedState = saved;
     if (explicitSection) {
       section = clamp(parseInt(params.get("section") || "0", 10) || 0, 0, data.sections.length - 1);
       pendingRestoreRatio = saved.section === section ? saved.ratio : 0;
@@ -195,7 +212,7 @@
       select.appendChild(opt);
     });
 
-    setSection(section, { push: false, restoreRatio: pendingRestoreRatio, smooth: false });
+    setSection(section, { push: false, restoreRatio: pendingRestoreRatio, savedState: saved.section === section ? pendingSavedState : null });
     if (storageUnavailable) notify("Браузърът не позволява запазване на мястото за четене.");
 
     // Отчита читател само след общо 5 минути активно време на видима страница.
@@ -216,7 +233,7 @@
   }
 
   const script = document.createElement("script");
-  script.src = `assets/data/${work}.js`;
+  script.src = `assets/data/${work}.js${work === "svetite-zemi" ? "?v=20261021" : ""}`;
   script.onload = initialize;
   script.onerror = () => { $("readerText").textContent = "Произведението не можа да бъде заредено."; };
   document.head.appendChild(script);
@@ -234,13 +251,13 @@
 
   const applySize = () => {
     const ratio = data ? textScrollRatio() : 0;
+    const anchor = data ? window.ReadingPosition?.capture($("readerText")) : null;
     size = clamp(size, 17, 28);
     document.documentElement.style.setProperty("--reader-size", size + "px");
     storage.setItem("reader_size", String(size));
     $("fontSizeLabel").textContent = `${size}`;
     if (data) {
-      restoreScroll(ratio, false);
-      storage.setItem(stateKey, JSON.stringify({ section, ratio, updatedAt: Date.now() }));
+      restoreScroll(ratio, false, anchor);
     }
   };
   applySize();
