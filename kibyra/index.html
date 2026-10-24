@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080d19" />
+  <meta name="color-scheme" content="dark" />
+  <title>Оракулът на Кибира — 56 съдби · 2.0</title>
+  <style>
+:root { --night:#070c17; --navy:#0b1525; --navy2:#111e2f; --gold:#dfba75; --gold2:#f3d797; --sand:#e9deca; --muted:#a59c8c; --line:rgba(216,179,105,.22); --panel:rgba(17,27,43,.96); }
+* { box-sizing:border-box; }
+html { font-size:16px; background:var(--night); }
+body { margin:0; color:var(--sand); font-family:'Trebuchet MS','Segoe UI',Arial,sans-serif; background:radial-gradient(circle at 50% -5%,#203146 0%,#0b1423 32%,var(--night) 70%); min-height:100vh; }
+button,textarea { font-family:inherit; }
+button { cursor:pointer; -webkit-tap-highlight-color:transparent; }
+button:focus-visible,textarea:focus-visible { outline:2px solid var(--gold2); outline-offset:2px; }
+.app-shell { max-width:650px; margin:0 auto; min-height:100dvh; display:flex; flex-direction:column; position:relative; }
+.topbar { position:sticky; top:0; z-index:10; height:72px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:10px 20px; border-bottom:1px solid var(--line); background:rgba(7,12,23,.96); box-shadow:0 12px 30px #05091170; }
+.brand { display:flex; align-items:center; gap:12px; cursor:pointer; }
+.brand-emblem { width:40px; height:40px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--gold); color:var(--gold2); font-size:24px; background:radial-gradient(circle,#47392b 0%,#101727 64%); box-shadow:0 0 16px rgba(220,172,92,.1),inset 0 0 10px rgba(220,172,92,.1); }
+.brand-text { display:flex; flex-direction:column; gap:3px; }
+.brand-text strong { font-family:Georgia,serif; font-size:19px; letter-spacing:.15em; color:var(--gold2); }
+.brand-text small { font-size:9px; letter-spacing:.27em; color:#b1a184; }
+.sound-toggle { border:1px solid var(--line); background:#182334; color:var(--gold2); width:38px; height:38px; font-size:23px; border-radius:50%; }
+.sound-toggle.off { color:#667082; }
+main { flex:1; }
+.screen { display:none; padding-bottom:26px; }
+.screen.active { display:block; animation:showScreen .24s ease-out; }
+@keyframes showScreen { from{opacity:.6; transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
+.hero { height:325px; overflow:hidden; position:relative; text-align:center; padding-top:60px; background: radial-gradient(ellipse at 50% 74%,rgba(223,186,117,.13),transparent 54%); isolation:isolate; }
+.hero::before, .hero::after { content:'✧'; position:absolute; color:#d9b37140; font-size:20px; top:52px; }
+.hero::before{left:9%}.hero::after{right:9%}
+.hero-halo { position:absolute; inset:15px 25% auto; height:190px; border:1px solid #b9966140; border-radius:50%; box-shadow:0 0 70px rgba(215,160,83,.1),inset 0 0 65px rgba(215,160,83,.06); z-index:-1; }
+.arch { pointer-events:none; position:absolute; opacity:.26; width:275px; height:245px; bottom:-83px; left:50%; transform:translateX(-50%); border:7px solid #c09c62; border-bottom:none; border-radius:136px 136px 0 0; z-index:-1; }
+.arch:after { content:''; position:absolute; left:25px;right:25px;bottom:0;top:31px; border:2px solid #d5bb83; border-bottom:none; border-radius:100px 100px 0 0; }
+.arch-column { position:absolute; height:135px; width:18px; background:repeating-linear-gradient(90deg,#b8a081 0px,#c7ae8d 3px,#786245 5px); bottom:0; }
+.arch-column.left {left:11px}.arch-column.right {right:11px}
+.arch-sun { position:absolute; left:0;right:0;top:20px; font-family:serif; font-size:57px; color:#f5d39b; }
+.eyebrow,.section-kicker { display:block; color:var(--gold); font-weight:700; font-size:10px; letter-spacing:.26em; }
+.hero h1, .page-title h1 { font-family:Georgia,'Times New Roman',serif; font-weight:normal; }
+.hero h1 { font-size:46px; margin:16px 0 13px; line-height:1.05; text-shadow:0 0 30px #d9a85616; }
+.hero h1 em { font-style:normal; color:var(--gold2); }
+.hero-copy { color:#c3b7a1; font-family:Georgia,serif; line-height:1.65; font-size:15px; margin:0; }
+.hero-rule { display:flex; align-items:center; justify-content:center; gap:15px; color:#ddbd7e; font-size:18px; margin:23px auto 0; }
+.hero-rule:before,.hero-rule:after { content:''; width:63px; height:1px; background:linear-gradient(90deg,transparent,#af8650); }
+.hero-rule:after { transform:rotate(180deg); }
+.question-card,.throw-card { margin:0 16px 15px; padding:23px 19px; border:1px solid var(--line); border-radius:19px; background:linear-gradient(158deg,#152337,#0d1929 55%,#0b1423); box-shadow:0 12px 30px #03070e50; }
+.question-label { display:block; font:normal 22px Georgia,serif; margin:14px 0 12px; color:#f1dfc5; }
+textarea { resize:vertical; border:1px solid #5b4b3b; border-radius:12px; width:100%; min-height:80px; max-height:180px; padding:13px 13px; background:#090f1d; color:#f4ebdb; font-size:15px; line-height:1.5; }
+textarea::placeholder { color:#7f8190; }
+.privacy-note { margin:10px 0 0; font-size:11px; color:#8c948f; }
+.throw-card { text-align:center; }
+.throw-card .section-kicker { text-align:left; }
+.bone-tray { display:flex; justify-content:center; align-items:center; gap:9px; padding:20px 7px 12px; min-height:115px; perspective:540px; }
+.knuckle { position:relative; flex:0 0 auto; width:53px; height:77px; border-radius:39% 22% 36% 24% / 28% 41% 28% 39%; border:2px solid #cdb18b; background:linear-gradient(137deg,#e8d6ba 4%,#bb9e76 48%,#e2ca9e 75%,#907a5d); box-shadow:inset 3px 4px 8px #fff5d047,inset -4px -6px 9px #4b392b74,0 5px 0 #65462c,0 12px 18px #0009; display:grid; place-items:center; transform:rotate(-6deg); transition:transform .36s ease,filter .3s; }
+.knuckle:nth-child(2){transform:rotate(9deg) translateY(5px)}.knuckle:nth-child(3){transform:rotate(-2deg) translateY(-3px)}.knuckle:nth-child(4){transform:rotate(12deg) translateY(4px)}.knuckle:nth-child(5){transform:rotate(-11deg)}
+.knuckle:before { content:''; position:absolute; border:1px solid #806e50a8; inset:9px 7px; border-radius:37% 24% 30% 36%; }
+.knuckle .glyph { font:700 30px Georgia,serif; color:#60472b; text-shadow:1px 1px #f3e0b7; }
+.bone-tray.rolling .knuckle { animation:bonesRoll .65s ease-in-out infinite alternate; filter:brightness(1.18); }
+.bone-tray.rolling .knuckle:nth-child(2n) {animation-delay:-.19s}.bone-tray.rolling .knuckle:nth-child(3n){animation-delay:-.33s}
+@keyframes bonesRoll { from{transform:translateY(10px) rotate(-30deg) rotateY(0); } to{transform:translateY(-11px) rotate(28deg) rotateY(155deg);} }
+.bone-caption { font-size:11px; color:#afa18d; letter-spacing:.04em; margin:0 0 21px; }
+.gold-button { width:100%; min-height:54px; border:1px solid #ffe4aa; border-radius:12px; background:linear-gradient(110deg,#a97939,#f1d28a 48%,#b58a4b); color:#20180e; font-size:13px; font-weight:900; letter-spacing:.14em; box-shadow:inset 0 2px 3px #fff4cd88,0 6px 22px #a27a3650; display:flex; gap:10px; align-items:center; justify-content:center; }
+.gold-button:active{transform:translateY(2px)}.gold-button:disabled{opacity:.7;cursor:wait}
+.button-icon { font-size:19px; }.button-arrow{font-size:21px;}
+.result-panel { border:1px solid #e0be7c72; margin:0 16px 22px; border-radius:22px; text-align:center; padding:24px 22px 20px; background:radial-gradient(ellipse at 50% 10%,#43392280,transparent 65%),linear-gradient(140deg,#1d2834,#0b1524); box-shadow:0 4px 55px #d8ad3d1a; }
+.result-panel.hidden,.hidden { display:none !important; }
+.result-decor { color:#cbaa72; letter-spacing:.8em; margin:0 0 16px; font-size:16px; }
+.result-index{font-size:11px;color:#bea47c;letter-spacing:.17em;margin:19px auto 0;}
+.result-panel h2{font:normal 32px Georgia,serif;color:#f1d49a;line-height:1.1;margin:12px auto 16px;}
+.result-text { font:normal 19px/1.65 Georgia,serif; color:#f1e5d3; margin:0 0 18px; }
+.result-values { display:inline-block; font-size:13px; border-top:1px solid #756343; border-bottom:1px solid #756343; padding:9px 13px; margin-bottom:18px; letter-spacing:.08em; color:#d6be92; }
+.notice,.catalog-note{font-size:11px;line-height:1.5;color:#aba99f;}
+.notice{margin-bottom:17px}
+.outline-button { border:1px solid #a98650; color:#eaca8b; border-radius:11px; background:#0b1220; padding:13px 18px; font-size:12px; letter-spacing:.1em; font-weight:800; width:100%; }
+.tabbar { flex-shrink:0; position:sticky; bottom:0; display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid #ad8f5666; background:rgba(6,11,22,.98); padding:6px 5px calc(7px + env(safe-area-inset-bottom)); z-index:20; box-shadow:0 -12px 24px #04070e8c; }
+.tab { border:0; background:none; color:#81889a; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; font-size:11px; }
+.tab-icon{font-family:Georgia,serif;font-size:24px;height:27px;line-height:27px;}.tab.active{color:var(--gold2);}.tab.active .tab-icon{text-shadow:0 0 14px #f8c87570}
+.page-title { margin:28px 20px 23px; }
+.page-title h1 { font-size:39px; margin:10px 0; color:var(--gold2); }
+.page-title p { margin:0; line-height:1.6; color:#c0b6a5; font-size:14px; }
+.history-list,.catalog-list { padding:0 16px; display:flex; flex-direction:column; gap:10px; }
+.history-item,.catalog-item { width:100%; text-align:left; border:1px solid var(--line); background:linear-gradient(115deg,#142134,#0e1827); border-radius:14px; padding:15px 15px; color:var(--sand); }
+.item-row { display:flex; align-items:center; gap:12px; justify-content:space-between; }
+.item-title { font:normal 20px Georgia,serif;color:#edcf92;margin:5px 0 5px; }
+.item-meta { font-size:11px;color:#9c9585;letter-spacing:.05em; }
+.item-text {font-size:13px;color:#c9c1b5;line-height:1.5; margin:8px 0 0;}
+.item-arrow { color:var(--gold);font-size:21px; }
+.empty-history { padding:55px 12px; text-align:center; color:#9aa0aa; border:1px dashed var(--line); border-radius:15px; }
+.empty-history .empty-star { display:block;color:var(--gold);font-size:37px;margin-bottom:12px; }
+.quiet-button { display:block; margin:23px auto; color:#d9b485;background:transparent;border:1px solid #72583c;border-radius:11px;padding:10px 18px; }
+.catalog-note { margin:0 16px 18px; padding:13px; border-left:2px solid #c9a36b; background:#1b2230; }
+.about-card,.source-card { background:#111d2d;border:1px solid var(--line);padding:20px;margin:0 16px 15px;border-radius:15px; }
+.about-card h2 { font:normal 23px Georgia,serif;color:var(--gold2);margin:0 0 12px; }
+.about-card p,.source-card p { font-size:14px;line-height:1.75;color:#c9c5ba;margin:9px 0; }
+.source-card strong {display:block;margin:12px 0 0;color:#e2d1b5;font-size:14px;}
+.source-card .outline-button{margin-top:12px;}
+.credit {text-align:center;margin:24px 18px;color:#8a9a9e;font-size:11px;line-height:1.8;}
+.toast { display:none;position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#25344a;border:1px solid var(--gold);box-shadow:0 12px 25px #0008;color:#f2deb4;padding:12px 18px;border-radius:11px;z-index:100;font-size:13px;min-width:160px;max-width:90vw;text-align:center; }
+.toast.show{display:block;}
+@media (max-width:370px) { .hero h1{font-size:40px}.knuckle{width:45px;height:69px}.bone-tray{gap:6px}.brand-text strong{font-size:17px}.question-card,.throw-card{margin-left:10px;margin-right:10px}.hero{height:300px} }
+@media (min-width:550px) { .hero{height:365px;padding-top:80px}.hero h1{font-size:56px}.question-card,.throw-card{margin-left:32px;margin-right:32px}.result-panel{margin-left:32px;margin-right:32px}.knuckle{width:63px;height:86px}.tabbar{border-left:1px solid var(--line);border-right:1px solid var(--line)} }
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+/* v2: intelligible answer first, verse second */
+.result-topic{font:600 12px/1.5 system-ui,sans-serif;color:#d6b67c;letter-spacing:.04em;margin:12px auto 17px;}
+.direct-answer{background:linear-gradient(140deg,#2a3141,#152334);border:1px solid #d9b76b8c;border-radius:14px;padding:18px 17px 16px;margin:10px auto 24px;box-shadow:0 0 28px #c08f2430;}
+.direct-answer span,.verse-label{font:600 11px/1.5 system-ui,sans-serif;letter-spacing:.17em;color:#c6a76f;}
+.direct-answer p{font:normal 22px/1.5 Georgia,serif;color:#fff5de;margin:12px auto 0;}
+.verse-label{display:block;margin:2px 0 12px;}
+.result-text{font-style:italic;color:#e9d5b6;font-size:18px;}
+.historical-context{font:12px/1.6 system-ui,sans-serif;text-align:left;margin:10px 0 20px;padding:12px;border-left:2px solid #c6a76f;color:#b8b0a1;background:#141e2c;}
+.result-panel{padding-top:22px;}
+@media(max-width:370px){.direct-answer p{font-size:19px;}.result-text{font-size:17px;}}
+
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand" role="button" tabindex="0" onclick="go('oracle')" onkeydown="if(event.key==='Enter')go('oracle')">
+        <span class="brand-emblem" aria-hidden="true">✦</span>
+        <div class="brand-text"><strong>КИБИРА</strong><small>ДРЕВНИЯТ ОРАКУЛ</small></div>
+      </div>
+      <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Звукови ефекти" aria-pressed="true" onclick="toggleSound()">♫</button>
+    </header>
+
+    <main>
+      <section class="screen active" id="screen-oracle" aria-label="Оракул">
+        <div class="hero">
+          <div class="hero-halo"></div>
+          <div class="arch" aria-hidden="true"><span class="arch-sun">☼</span><span class="arch-column left"></span><span class="arch-column right"></span></div>
+          <span class="eyebrow">ГЛАСОВЕ ОТ ДРЕВНОСТТА</span>
+          <h1>Оракулът<br/><em>на Кибира</em></h1>
+          <p class="hero-copy">Пет кости. Пет знака.<br/>Един от 56 древни знака.<br/>Тълкуване според твоя въпрос.</p>
+          <div class="hero-rule"><span>✦</span></div>
+        </div>
+
+        <div class="question-card">
+          <div class="section-kicker">I · ПОПИТАЙ ОРАКУЛА</div>
+          <label for="question" class="question-label">Какво тежи на мислите ти?</label>
+          <textarea id="question" maxlength="220" rows="2" placeholder="Напиши въпрос или хвърли костите без въпрос…" aria-label="Въпрос към оракула"></textarea>
+          <p class="privacy-note">◈ Въпросите остават само на устройството ти.</p>
+        </div>
+
+        <div class="throw-card">
+          <div class="section-kicker">II · ПЕТТЕ АСТРАГАЛА</div>
+          <div class="bone-tray" id="bone-tray" aria-label="Пет древни кости за гадаене">
+            <div class="knuckle" data-index="0"><span class="glyph">1</span></div>
+            <div class="knuckle" data-index="1"><span class="glyph">3</span></div>
+            <div class="knuckle" data-index="2"><span class="glyph">4</span></div>
+            <div class="knuckle" data-index="3"><span class="glyph">6</span></div>
+            <div class="knuckle" data-index="4"><span class="glyph">1</span></div>
+          </div>
+          <p class="bone-caption">Всяка кост има четири възможни стойности: 1 · 3 · 4 · 6</p>
+          <button class="gold-button" id="roll-button" type="button" onclick="throwBones()"><span class="button-icon">✦</span> ХВЪРЛИ КОСТИТЕ <span class="button-arrow">⟶</span></button>
+        </div>
+
+        <section id="result" class="result-panel hidden" aria-live="polite">
+          <div class="result-decor">✦ ✧ ✦</div>
+          <div class="section-kicker">III · ГЛАСЪТ НА ОРАКУЛА</div>
+          <div class="result-index" id="result-index">ПОСЛАНИЕ № 01 / 56</div>
+          <h2 id="result-title"></h2>
+          <p class="result-topic" id="result-topic"></p>
+          <div class="direct-answer"><span>ОТГОВОР НА ВЪПРОСА</span><p id="result-direct"></p></div>
+          <p class="verse-label">ПОСЛАНИЕ ОТ КОСТИТЕ</p>
+          <p class="result-text" id="result-text"></p>
+          <p class="historical-context hidden" id="result-historical"></p>
+          <div class="result-values" id="result-values"></div>
+          <div class="notice">Съвременна художествена интерпретация, а не превод на древния надпис.</div>
+          <button class="outline-button" type="button" id="share-button" onclick="shareCurrent()">↗ СПОДЕЛИ ПОСЛАНИЕТО</button>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-history" aria-label="История">
+        <div class="page-title"><div class="section-kicker">ТВОИТЕ ХВЪРЛЯНИЯ</div><h1>История</h1><p>Посланията, които костите ти разкриха.</p></div>
+        <div class="history-list" id="history-list"></div>
+        <button id="clear-history" class="quiet-button hidden" type="button" onclick="clearHistory()">✕ Изтрий историята</button>
+      </section>
+
+      <section class="screen" id="screen-catalog" aria-label="56 съчетания">
+        <div class="page-title"><div class="section-kicker">ДРЕВНИЯТ МЕТОД</div><h1>56 съчетания</h1><p>Пет кости с четири стойности образуват точно 56 различни комбинации, ако редът не се отчита.</p></div>
+        <div class="catalog-note">Всеки знак има свое художествено пророчество и отделно тълкуване за различни въпроси. Текстовете не са дословни древни преводи.</div>
+        <div id="catalog-list" class="catalog-list"></div>
+      </section>
+
+      <section class="screen" id="screen-about" aria-label="За оракула">
+        <div class="page-title"><div class="section-kicker">ЕДНА ИСТОРИЯ НА 1800 ГОДИНИ</div><h1>Тайната на Кибира</h1><p>Когато хората питали съдбата, отговорът бил издялан върху камък.</p></div>
+        <div class="about-card"><h2>Как е работело гадаенето?</h2><p>В римската епоха в южна Мала Азия хората хвърляли пет астрагала — специални кости за игра и гадаене. Четирите им възможни страни имали стойности 1, 3, 4 и 6. Подреждането на пет стойности без значение на реда давало 56 съчетания.</p></div>
+        <div class="about-card"><h2>Какво е намерено?</h2><p>През 2024 г. археолози откриват в Кибира, днешна Турция, каменен паметник с оракулски надписи върху четирите му страни. Изследването му е публикувано през октомври 2026 г. и разкрива връзки с подобни надписи от други градове.</p><p>Паметникът е свързан с култа към Хермес. Древният текст е исторически извор, който се нуждае от внимателен научен превод.</p></div>
+        <div class="about-card"><h2>Какво е автентично тук?</h2><p><strong>Исторически:</strong> петте кости, числата 1, 3, 4 и 6, начинът за образуване на 56-те съчетания и фактите за находката.</p><p><strong>Съвременно:</strong> написаните на български послания, техните заглавия и обяснения. Те са художествено вдъхновени от оракулската традиция, но не са представени като древни цитати.</p><p>Хвърлянията са художествено забавление, а не надеждна прогноза. Не разчитай на тях за медицински, финансови, правни или други важни решения.</p></div>
+        <div class="source-card"><div class="section-kicker">НАУЧЕН ИЗТОЧНИК</div><strong>Ş. Kileci, N. Tüner Önen, Ş. Özüdoğru</strong><p>A New Astragalos Oracle Text from Kibyra: A Comparative Study with Southern Asia Minor Parallels. <i>Gephyra</i> 31 (2026), 257–294.</p><button type="button" class="outline-button" onclick="openSource('https://doi.org/10.37095/gephyra.2002699')">↗ ОТВОРИ ПУБЛИКАЦИЯТА</button></div>
+        <p class="credit">„Оракулът на Кибира — 56 съдби · 2.0“ · Българско мобилно приложение<br/>Концепция: Огнян Пеев · разработено със съдействието на ChatGPT.</p>
+      </section>
+    </main>
+
+    <nav class="tabbar" aria-label="Навигация">
+      <button class="tab active" data-screen="oracle" onclick="go('oracle')"><span class="tab-icon">✦</span><span>Оракул</span></button>
+      <button class="tab" data-screen="history" onclick="go('history')"><span class="tab-icon">◷</span><span>История</span></button>
+      <button class="tab" data-screen="catalog" onclick="go('catalog')"><span class="tab-icon">▦</span><span>56 знака</span></button>
+      <button class="tab" data-screen="about" onclick="go('about')"><span class="tab-icon">⌘</span><span>За Кибира</span></button>
+    </nav>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+window.KIBYRA_DATA={"schema":"kibyra-content-v2-review","language":"bg","disclaimer":"Исторически вдъхновена художествена система за забавление; оригинални съвременни текстове, а не преводи на древни надписи.","sources":["https://doi.org/10.37095/gephyra.2002699","https://www.earth.com/science/kibyra-knucklebone-oracle-56-answers/"],"face_values":[1,3,4,6],"signs":[{"id":1,"title":"Благият съвет на Зевс","tone":"favorable","core":"Мъдър съвет ще се роди там, където досега е имало смут. Не отвръщай лице от помощта; почети доброто, което идва към теб.","adaptations":{"day":"Да. Денят носи благоприятен знак: разумът ще ти помогне повече от бързането.","love":"Има място за близост; една добра дума ще отвори повече от настойчивост.","work":"Замисленото може да успее, особено ако приемеш съвет от опитен човек.","money":"Благоприятно е за умерен разход, но не и за самоуверен риск.","travel":"Пътят е благосклонен; подготви се и тръгни без излишно безпокойство."},"provenance":"modern_artistic","faces":[1,1,1,1,1],"sum":5,"historical_note":"Пет единици: текстът на Зевс Олимпийски обещава добър съвет и съдържа почит към Афродита.","historical_status":"theme_from_reported_sources"},{"id":2,"title":"Утринният вятър","tone":"favorable","core":"Вятърът обърна платната към открито море. Който се готви от нощта, посреща утрото със спокойна ръка.","adaptations":{"day":"Да. Началото може да е мудно, но след него идва по-лек час.","love":"Някой очаква знак от теб; не оставяй благата възможност да отмине.","work":"Удачен ден да започнеш отлагано дело и да заявиш намерението си.","money":"Малка възможност се открива; не влагай повече от необходимото.","travel":"Потеглянето е благоприятно, стига подготовката да е завършена."},"provenance":"modern_artistic","faces":[1,1,1,1,3],"sum":7,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":3,"title":"Думата на пратеника","tone":"mixed","core":"Пратеник носи вест, но устата му знае само половината истина. Чуй го докрай и потърси онова, което е премълчал.","adaptations":{"day":"По-скоро добър ден, но не приемай всяка новина веднага за вярна.","love":"Разговорът ще изясни старо съмнение, ако зададеш въпроса направо.","work":"Предложение може да изглежда по-добро, отколкото е; провери подробностите.","money":"Не поемай задължение само заради обещана печалба.","travel":"Пътят е възможен, но потвърди времето и уговорките преди тръгване."},"provenance":"modern_artistic","faces":[1,1,1,1,4],"sum":8,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":4,"title":"Камъкът пред портата","tone":"caution","core":"Дори висока порта се затваря от малък камък в пантата. Погледни къде е пречката, преди да натиснеш с цялата си сила.","adaptations":{"day":"По-скоро не. Денят няма да е съвсем лек; дребно препятствие може да изиска внимание.","love":"Не прави от малко недоразумение голяма обида.","work":"По-добре поправи пропуска, вместо да започваш нова работа.","money":"Дребен разход може да се окаже необходим; избегни излишните покупки.","travel":"Провери какво носиш, преди да тръгнеш."},"provenance":"modern_artistic","faces":[1,1,1,1,6],"sum":10,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":5,"title":"Светлият пристан","tone":"favorable","core":"Корабът вижда брега след дългото море. Нека веслата замлъкнат едва когато въжетата стигнат пристана.","adaptations":{"day":"Да. Довършено дело може да донесе облекчение и приятна вечер.","love":"Умората от дълга раздяла може да отстъпи пред среща.","work":"Завърши започнатото; наградата е по-близо от новото начинание.","money":"По-благоприятно е да получиш дължимо, отколкото да рискуваш за повече.","travel":"Завръщането е под добър знак."},"provenance":"modern_artistic","faces":[1,1,1,3,3],"sum":9,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":6,"title":"Медните везни","tone":"mixed","core":"На едното блюдо лежи злато, на другото — неизречена дума. Претегли и двете, преди да посегнеш.","adaptations":{"day":"Не е еднозначно. Денят ще зависи от една справедлива преценка; не съди прибързано.","love":"Двама души могат да бъдат прави за различни неща.","work":"На работа изслушай двете страни, преди да вземеш страна.","money":"Провери условията; печалба без ясна цена не е сигурна печалба.","travel":"Избери по-сигурния път, макар да е по-бавен."},"provenance":"modern_artistic","faces":[1,1,1,3,4],"sum":10,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":7,"title":"Отворената врата","tone":"favorable","core":"Там, където вчера стоеше затворена врата, днес личи светлина. Не се страхувай да почукаш отново.","adaptations":{"day":"Да. Нещо отказано преди може да получи втори шанс.","love":"Помирение е възможно, ако първата дума е искрена.","work":"Потърси отново човека, от когото очакваш решение.","money":"Старо искане може да бъде разгледано отново.","travel":"Път, отменен по-рано, може да се окаже свободен."},"provenance":"modern_artistic","faces":[1,1,1,3,6],"sum":12,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":8,"title":"Птицата над стената","tone":"mixed","core":"Птицата видя изхода, който стражът не забеляза. Понякога височината помага повече от силата.","adaptations":{"day":"Не е еднозначно. Денят може да те изненада с неочаквано решение на дребен проблем.","love":"Не настоявай на своето; другият човек може да вижда нещо важно.","work":"Промени подхода и препятствието ще изглежда по-малко.","money":"Не търси само един източник на доход или помощ.","travel":"Обиколен път може да те избави от задръстване или забавяне."},"provenance":"modern_artistic","faces":[1,1,1,4,4],"sum":11,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":9,"title":"Протегнатата ръка","tone":"favorable","core":"Странникът получава вода от непознат и открива съюзник. Доброто не винаги идва от този, когото очакваш.","adaptations":{"day":"Да. Денят носи вероятност за навременна подкрепа.","love":"Не отблъсквай жест на внимание заради стара гордост.","work":"Приеми помощ от сътрудник, вместо да се мъчиш сам.","money":"Подкрепа е възможна, но изясни дали е дар или заем.","travel":"Спътник може да направи пътуването по-леко."},"provenance":"modern_artistic","faces":[1,1,1,4,6],"sum":13,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":10,"title":"Тихият кладенец","tone":"caution","core":"Водата изглежда спокойна, ала не знаеш дълбочината ѝ. Не пускай ведрото, преди да си укрепил въжето.","adaptations":{"day":"По-скоро не. Спокоен отвън, денят може да крие напрежение; не прибързвай.","love":"Мълчанието не е непременно съгласие; попитай честно.","work":"Зад видимото спокойствие може да има недовършена задача.","money":"Не подписвай онова, което не си прочел докрай.","travel":"Пази запас и не разчитай само на обещания."},"provenance":"modern_artistic","faces":[1,1,1,6,6],"sum":15,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":11,"title":"Златната нишка","tone":"favorable","core":"Нишката свързва далечни съдби и води от заплетения възел към изхода. Протегни ръка, но не дърпай рязко.","adaptations":{"day":"Да. Две привидно случайни събития могат да ти помогнат да разбереш деня.","love":"Стар познат може отново да стане близък.","work":"Полезна връзка между хора ще придвижи работата.","money":"Пари може да дойдат от старо сътрудничество, а не от нов риск.","travel":"По пътя може да срещнеш човек, когото познаваш."},"provenance":"modern_artistic","faces":[1,1,3,3,3],"sum":11,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":12,"title":"Гостът под стряхата","tone":"mixed","core":"Под стряхата пристига гост, а с него — неочаквана вест. Приеми го почтено, но дръж очите си отворени.","adaptations":{"day":"Не е еднозначно. Денят ще донесе раздвижване, не непременно покой.","love":"Нова среща може да обърка очакванията ти по приятен начин.","work":"Нов човек ще предложи посока; изслушай го, преди да обещаеш.","money":"Внимавай с непланирани покупки, подтикнати от среща.","travel":"Неочаквана покана може да промени маршрута."},"provenance":"modern_artistic","faces":[1,1,3,3,4],"sum":12,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":13,"title":"Дъждът над нивите","tone":"favorable","core":"След сухата земя идва дъждът и семето се събужда. Търпението не е било напразно.","adaptations":{"day":"Да. Денят е благоприятен за добри вести и отложено облекчение.","love":"Топлина може да се върне там, където е имало студенина.","work":"Усилие от миналите дни може да получи признание.","money":"Появява се знак за постепенно възстановяване, не за внезапно богатство.","travel":"Ако си чакал по-добро време, то може да настъпи."},"provenance":"modern_artistic","faces":[1,1,3,3,6],"sum":14,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":14,"title":"Счупеното весло","tone":"adverse","core":"Не карай лодката с пречупено весло към бързея. Първо поправи онова, без което пътят става опасен.","adaptations":{"day":"По-скоро труден ден; не насилвай нещо, което явно не върви.","love":"Не поставяй ново условие, преди да поправиш старото недоверие.","work":"Спри и отстрани грешката, вместо да ускоряваш работата.","money":"Не рискувай средства, за да покриеш предишна загуба.","travel":"Отложи тръгването при съмнение за безопасността."},"provenance":"modern_artistic","faces":[1,1,3,4,4],"sum":13,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":15,"title":"Чашата на мярката","tone":"mixed","core":"Препълнената чаша се разлива върху празничната дреха. Дори радостта иска мярка.","adaptations":{"day":"Не е еднозначно. Денят може да е хубав, ако не прекалиш с плановете си.","love":"Дай място и на желанието на другия.","work":"Не обещавай повече, отколкото можеш да свършиш.","money":"Умереността ще запази повече от случайна печалба.","travel":"По-добре един добре планиран преход, отколкото три прибързани."},"provenance":"modern_artistic","faces":[1,1,3,4,6],"sum":15,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":16,"title":"Първата светлина","tone":"favorable","core":"По края на хълма се появи първата светлина. Старата нощ не може да задържи утрото.","adaptations":{"day":"Да. Денят започва под добър знак, особено за ново начинание.","love":"Подходящ момент е за първа стъпка към сближаване.","work":"Започнатото днес може да положи добра основа.","money":"Ново малко начинание е по-добро от голяма необмислена инвестиция.","travel":"Ранното тръгване носи предимство."},"provenance":"modern_artistic","faces":[1,1,3,6,6],"sum":17,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":17,"title":"Следата в праха","tone":"caution","core":"В праха лежи следа от вчерашните нозе. Ако не я разпознаеш, ще попаднеш пак в същата яма.","adaptations":{"day":"По-скоро не. Денят иска да си спомниш стара грешка, преди да я повториш.","love":"Стар спор може да се върне, ако не е изяснен.","work":"Провери какво се е объркало миналия път.","money":"Повтори проверката на сметката; стар пропуск може да струва пари.","travel":"Не минавай по опасен маршрут само защото ти е познат."},"provenance":"modern_artistic","faces":[1,1,4,4,4],"sum":14,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":18,"title":"Бавният керван","tone":"mixed","core":"Керванът стига далеч, защото пази товара и не гони залеза. Бързият ход невинаги е верният.","adaptations":{"day":"Не е еднозначно. Денят не обещава бързи чудеса, но може да мине спокойно.","love":"Близостта ще се гради с търпение, не с настояване.","work":"Напредъкът е бавен, но не е спрял.","money":"Предпочети сигурен малък приход пред необмислен залог.","travel":"Остави повече време за пътуването."},"provenance":"modern_artistic","faces":[1,1,4,4,6],"sum":16,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":19,"title":"Чуждият залив","tone":"caution","core":"В непознатия залив водата е тиха, но под нея спят остри камъни. Не хвърляй котва, без да си видял дъното.","adaptations":{"day":"По-скоро не. Денят крие привидно лесен избор, който трябва да провериш.","love":"Ново обещание може да звучи примамливо, но още не познаваш човека.","work":"Не сменяй посоката само заради лъскаво предложение.","money":"Избягвай непроверена сделка.","travel":"На непознато място се довери на проверена информация."},"provenance":"modern_artistic","faces":[1,1,4,6,6],"sum":18,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":20,"title":"Маслиновият клон","tone":"favorable","core":"Врагът оставя копието и протяга маслинова клонка. Дори дълга вражда има ден на край.","adaptations":{"day":"Да. Денят е благоприятен за мир и разбирателство.","love":"Добър момент е да поискаш или да дадеш прошка.","work":"Спор в работата може да приключи с разумен компромис.","money":"Уреждане на старо задължение носи спокойствие.","travel":"Срещата, от която си се тревожил, може да мине мирно."},"provenance":"modern_artistic","faces":[1,1,6,6,6],"sum":20,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":21,"title":"Пламъкът в мрака","tone":"mixed","core":"Малък пламък показва лице, което мракът е скривал. Не бъркай светлината с пожар.","adaptations":{"day":"Не е еднозначно. Денят ще ти покаже нещо важно, но не цялата картина.","love":"Чуждо признание може да осветли истината за отношенията.","work":"Един факт ще изясни заплетена работа.","money":"Проверената информация струва повече от слуха за печалба.","travel":"Светлина ще се появи по пътя, но следвай знаците внимателно."},"provenance":"modern_artistic","faces":[1,3,3,3,3],"sum":13,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":22,"title":"Пустият хамбар","tone":"adverse","core":"Хамбарът е отворен, а последното зърно вече е изнесено. Не раздавай онова, което утре ще ти трябва.","adaptations":{"day":"Не. Денят е неблагоприятен за разпиляване на време и сили.","love":"Не обещавай внимание, което не можеш да дадеш.","work":"Силите и ресурсите няма да стигнат за всички задачи.","money":"Съхрани парите си; днес не е ден за покупки по прищявка.","travel":"Носи необходимото и избягвай дълъг път без подготовка."},"provenance":"modern_artistic","faces":[1,3,3,3,4],"sum":14,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":23,"title":"Седмият камък","tone":"favorable","core":"Седмият камък закрепи стената там, където шест не успяха. Още малко усилие може да довърши делото.","adaptations":{"day":"Да. Денят е добър за последен решителен напън.","love":"Търпението може да бъде възнаградено с отклик.","work":"Не изоставяй почти готовото дело.","money":"Постоянството може да донесе малък, но заслужен резултат.","travel":"Остава малко до целта; не губи посоката."},"provenance":"modern_artistic","faces":[1,3,3,3,6],"sum":16,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":24,"title":"Двата бряга","tone":"mixed","core":"Два бряга спорят кой държи реката, ала тя принадлежи и на двата. Път има за онзи, който построи мост.","adaptations":{"day":"Не е еднозначно. Денят е променлив; разговор може да го направи по-добър.","love":"Двама души трябва да отстъпят по малко, за да се срещнат.","work":"Потърси сътрудничество между противоположни позиции.","money":"Раздели риска, вместо да заложиш всичко на една възможност.","travel":"Може да се наложи да смениш маршрут или спътник."},"provenance":"modern_artistic","faces":[1,3,3,4,4],"sum":15,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":25,"title":"Змиите край пътя","tone":"caution","core":"В тревата до пътеката нещо се размърда. Стъпи внимателно и не се надсмивай над предупреждението.","adaptations":{"day":"По-скоро не. Денят изисква предпазливост; избягвай излишни спорове.","love":"Пази се от прибързани обвинения и чужди внушения.","work":"Провери условието, което всички са пропуснали.","money":"Не влагай средства в неясно обещание.","travel":"Не бързай на път, ако има явен знак за риск."},"provenance":"modern_artistic","faces":[1,3,3,4,6],"sum":17,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":26,"title":"Празният кратер","tone":"mixed","core":"Празният съд чака вино, но не бива да бъде напълнен с вода и наречен пълен. Признай какво липсва.","adaptations":{"day":"Не е еднозначно. Денят няма да даде всичко желано, но ще покаже какво ти трябва.","love":"Назови липсата открито, вместо да я прикриваш.","work":"Поискай липсващата информация, преди да продължиш.","money":"Не смятай очаквани пари за вече получени.","travel":"Тръгни едва когато необходимото е събрано."},"provenance":"modern_artistic","faces":[1,3,3,6,6],"sum":19,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":27,"title":"Песента на ковача","tone":"favorable","core":"Чукът пада пак и пак, докато от огъня излезе добро острие. Ръката, която не се отказва, получава плод.","adaptations":{"day":"Да. Тихата упорита работа може да направи деня успешен.","love":"Постоянните малки жестове са по-силни от големи обещания.","work":"Трудът ти има добра посока; довърши започнатото.","money":"Печалбата, ако дойде, ще е от труд, а не от щастлив удар.","travel":"Добър знак за път с ясна цел."},"provenance":"modern_artistic","faces":[1,3,4,4,4],"sum":16,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":28,"title":"Сянката на кипариса","tone":"caution","core":"Слънцето е високо, а кипарисът дава тесен подслон. Отдъхни, преди да продължиш по знойната земя.","adaptations":{"day":"По-скоро не. Денят може да е уморителен; остави си време за отдих.","love":"Не води тежък разговор в миг на изтощение.","work":"Не настоявай да приключиш всичко наведнъж.","money":"Отложи големия разход, докато мисълта се избистри.","travel":"Направи почивка и не пренебрегвай признаците на умора."},"provenance":"modern_artistic","faces":[1,3,4,4,6],"sum":18,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":29,"title":"Мостът над пропастта","tone":"favorable","core":"Между двата бряга се появява мост, който не е съществувал вчера. Някой е работил, докато другите са спорили.","adaptations":{"day":"Да. Решение може да се появи след навременен разговор.","love":"Възстановяването на връзка е по-близо, отколкото изглежда.","work":"Сътрудничество ще отключи застояла работа.","money":"Договорка може да донесе полза и на двете страни.","travel":"Пътят напред е възможен благодарение на чужда помощ."},"provenance":"modern_artistic","faces":[1,3,4,6,6],"sum":20,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":30,"title":"Трите свидетелства","tone":"caution","core":"Един свидетел видя сенките, вторият — стъпките, третият — лицето. Не произнасяй присъда, преди да чуеш всички.","adaptations":{"day":"По-скоро не. Денят не е подходящ за категорични решения по слух.","love":"Не вярвай на обвинение, дошло само от един човек.","work":"Събери още сведения, преди да приемеш предложение.","money":"Изискай ясни документи и потвърждение.","travel":"Провери няколко източника, ако пътят е непознат."},"provenance":"modern_artistic","faces":[1,3,6,6,6],"sum":22,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":31,"title":"Стражът пред вратата","tone":"caution","core":"Стражът не спи, макар градът да празнува. Неговото бодърстване пази радостта на останалите.","adaptations":{"day":"По-скоро не. Денят може да е спокоен, ако не пренебрегнеш задълженията си.","love":"Грижа за близък е по-важна от шумна демонстрация.","work":"Провери отговорностите си, преди да си починеш.","money":"Пази онова, което вече притежаваш.","travel":"Не оставяй вещи и планове без надзор."},"provenance":"modern_artistic","faces":[1,4,4,4,4],"sum":17,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":32,"title":"Празничните венци","tone":"favorable","core":"По улицата носят венци и тежката врата е отворена. Радост има за този, който умее да я сподели.","adaptations":{"day":"Да. Денят може да ти даде повод за усмивка и обща радост.","love":"Добра вечер за среща или искрена нежност.","work":"Приключена задача може да бъде отпразнувана.","money":"Позволен е малък подарък, но без разточителство.","travel":"Пътуване за среща или празник е под добър знак."},"provenance":"modern_artistic","faces":[1,4,4,4,6],"sum":19,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":33,"title":"Колелото на грънчаря","tone":"mixed","core":"Съдът се поклати на колелото, ала умелият грънчар го поправи, преди глината да изсъхне.","adaptations":{"day":"Не е еднозначно. Денят може да тръгне накриво, но ще можеш да го поправиш.","love":"Не отхвърляй връзка заради първо недоразумение.","work":"Поправката днес ще спести по-голяма работа утре.","money":"Оправи дребна финансова грешка, преди да се натрупа.","travel":"Провери навреме резервния план."},"provenance":"modern_artistic","faces":[1,4,4,6,6],"sum":21,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":34,"title":"Бурното море","tone":"adverse","core":"Вятърът разкъса платното преди корабът да напусне залива. Днес морето не иска гости.","adaptations":{"day":"По-скоро не. Денят не е подходящ за големи начинания и спорове.","love":"Не настоявай за отговор, когато отсреща има гняв.","work":"Не започвай рискован проект точно сега.","money":"Въздържай се от необмислена сделка.","travel":"Отложи пътуване, ако условията го правят опасно."},"provenance":"modern_artistic","faces":[1,4,6,6,6],"sum":23,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":35,"title":"Силата на богинята майка","tone":"favorable","core":"Както силният лъв надвива рогатия звяр, така и решителният ще премине през препятствията. Не превръщай победата в жестокост.","adaptations":{"day":"Да. Знакът е много благоприятен: може да се справиш и с трудна задача.","love":"Увереността привлича, когато не унижава другия.","work":"Имаш сили да поведеш сложна работа към успех.","money":"Добър знак за заслужен резултат, без обещание за лесно богатство.","travel":"Труден маршрут може да бъде преодолян с добра подготовка."},"provenance":"modern_artistic","faces":[1,6,6,6,6],"sum":25,"historical_note":"Една единица и четири шестици: много благоприятен жребий под покровителството на Майката на боговете.","historical_status":"theme_from_reported_sources"},{"id":36,"title":"Неспазената клетва","tone":"adverse","core":"Дадената клетва стои над дома като дим от неугаснал огън. Който я наруши, сам кани бедата.","adaptations":{"day":"Не. Денят може да донесе неприятност от неизпълнено обещание.","love":"Не вярвай на нови думи, ако старите са били нарушени.","work":"Напомни си дадените срокове и отговорности.","money":"Не давай пари срещу голи уверения.","travel":"Потвърди уговорките преди тръгване."},"provenance":"modern_artistic","faces":[3,3,3,3,3],"sum":15,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":37,"title":"Скорпионите на пътя","tone":"caution","core":"Скорпиони се крият сред камъните на пътеката. Не ускорявай ход към място, което не си огледал.","adaptations":{"day":"По-скоро не. Денят предупреждава: не бързай, особено когато всичко изглежда лесно.","love":"Не вливай нова ревност в неясен разговор.","work":"Отложи действие, ако условията остават неясни.","money":"Внимавай за скрити условия и такси.","travel":"Пътувай предпазливо; знакът не благоприятства прибързано тръгване."},"provenance":"modern_artistic","faces":[3,3,3,3,4],"sum":16,"historical_note":"Четири тройки и една четворка: предупредителен образ със скорпиони по пътя.","historical_status":"theme_from_reported_sources"},{"id":38,"title":"Златните класове","tone":"favorable","core":"Нивата е узряла и сърпът вече чака. Събирай плодовете, преди вятърът да ги разпилее.","adaptations":{"day":"Да. Денят е благоприятен за довършване и получаване на заслужено.","love":"Отношение, градено с грижа, може да донесе радост.","work":"Подходящ момент да покажеш завършен труд.","money":"Възможен е разумен резултат от предишно усилие.","travel":"Добър знак за завръщане с довършена работа."},"provenance":"modern_artistic","faces":[3,3,3,3,6],"sum":18,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":39,"title":"Сребърният ключ","tone":"favorable","core":"Ключът беше под ръката на онзи, който дълго блъскаше по вратата. Тихата находчивост отваря тежки порти.","adaptations":{"day":"Да. Днес може да откриеш просто решение на досаден проблем.","love":"Нежна дума може да отключи дълъг разговор.","work":"Опитай различен метод; резултатът е обещаващ.","money":"По-добри условия може да се намерят с проучване.","travel":"Пътуването е благоприятно, ако избереш подходящото време."},"provenance":"modern_artistic","faces":[3,3,3,4,4],"sum":17,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":40,"title":"Скъсената сянка","tone":"mixed","core":"По пладне сянката става къса, ала вечер отново пораства. Не мери целия живот по един час.","adaptations":{"day":"Не е еднозначно. Денят ще се мени; не прави окончателен извод от сутринта.","love":"Настроенията се менят и не са присъда за чувствата.","work":"Не вземай необратимо решение в лош момент.","money":"Не се води от краткотрайна промяна в цената.","travel":"Изчакай, ако времето се мени рязко."},"provenance":"modern_artistic","faces":[3,3,3,4,6],"sum":19,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":41,"title":"Хлябът на пътника","tone":"favorable","core":"Пътникът раздели хляба си и не остана гладен. Споделеното добро му намери място край чужд огън.","adaptations":{"day":"Да. Денят е благоприятен за приятелство и взаимност.","love":"Малък жест на грижа ще бъде забелязан.","work":"Помогни на сътрудник и може да получиш помощ в замяна.","money":"Разумен подарък или услуга може да укрепи отношения.","travel":"Спътници ще направят пътя по-приятен."},"provenance":"modern_artistic","faces":[3,3,3,6,6],"sum":21,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":42,"title":"Здравото седло","tone":"mixed","core":"Конят е силен, ала хлабавото седло може да събори ездача. Провери ремъците, преди да вдигнеш прах.","adaptations":{"day":"Не е еднозначно. Денят обещава напредък, ако не пренебрегнеш подготовката.","love":"Не позволявай дребни пропуски да помрачат добър замисъл.","work":"Провери инструментите и документите, преди да започнеш.","money":"Подреди сметките, преди да поемеш нов разход.","travel":"Пътувай само с проверено оборудване."},"provenance":"modern_artistic","faces":[3,3,4,4,4],"sum":18,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":43,"title":"Лъвът край пътя","tone":"caution","core":"По пътеката мина лъв и всички птици замлъкнаха. Смелият не е онзи, който тръгва след него без оръжие.","adaptations":{"day":"По-скоро не. Денят изисква уважение към по-силни обстоятелства.","love":"Не превръщай чувствата в надпревара за надмощие.","work":"Избягвай открит сблъсък с човек, който държи решението.","money":"Рискът е по-голям, отколкото изглежда.","travel":"Не минавай напук през явно опасно място."},"provenance":"modern_artistic","faces":[3,3,4,4,6],"sum":20,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":44,"title":"Лунният камък","tone":"mixed","core":"На лунна светлина камъкът прилича на лице, а при изгрев пак е камък. Страхът разказва истории, които денят опровергава.","adaptations":{"day":"Не е еднозначно. Денят може да изглежда тревожен, но част от тревогата ще отслабне.","love":"Не ревнувай от предположение без доказателства.","work":"Провери фактите, преди да реагираш на слух.","money":"Не действай под влияние на страх от загуба.","travel":"Ориентирай се по реални условия, не по лошо предчувствие."},"provenance":"modern_artistic","faces":[3,3,4,6,6],"sum":22,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":45,"title":"Невидимата нишка","tone":"favorable","core":"Две ръце пазят една нишка и тя не се къса. Съюзът е здрав, когато и двете страни го държат.","adaptations":{"day":"Да. Денят е добър за споделена работа и внимание.","love":"Връзката може да укрепне с взаимна грижа.","work":"Доброто сътрудничество носи напредък.","money":"Честната договорка е по-ценна от хитрата печалба.","travel":"Добър знак за път с доверен спътник."},"provenance":"modern_artistic","faces":[3,3,6,6,6],"sum":24,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":46,"title":"Изтритият надпис","tone":"caution","core":"Дъждът е заличил половината думи върху камъка. Не дописвай липсващото с уверена ръка.","adaptations":{"day":"По-скоро не. Денят е неподходящ за заключения при непълна информация.","love":"Не измисляй чужди намерения там, където има мълчание.","work":"Липсващ документ може да промени решението.","money":"Провери всички числа и условия.","travel":"Не се довери на непълни указания."},"provenance":"modern_artistic","faces":[3,4,4,4,4],"sum":19,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":47,"title":"Нова следа в земята","tone":"favorable","core":"Край пресъхналия поток се появи нова следа. Някой е минал жив отвъд мястото, което си смятал за край.","adaptations":{"day":"Да. Денят може да предложи неочакван изход.","love":"Ново начало е възможно след честен разговор.","work":"Непознат подход може да даде резултат.","money":"Малка възможност може да се окаже полезна.","travel":"Открива се нов маршрут; провери го, преди да го следваш."},"provenance":"modern_artistic","faces":[3,4,4,4,6],"sum":21,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":48,"title":"Приливът","tone":"mixed","core":"Морето взема сутринта онова, което връща вечерта. Не поставяй съдбата си върху една единствена вълна.","adaptations":{"day":"Не е еднозначно. Денят може да премине от тревога към спокойствие.","love":"Не настоявай всеки миг да бъде еднакво близък.","work":"Ще има колебания, но не непременно провал.","money":"Не променяй дългосрочен план заради кратък спад.","travel":"Следи условията: пътят зависи от времето."},"provenance":"modern_artistic","faces":[3,4,4,6,6],"sum":23,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":49,"title":"Камъкът на връщането","tone":"caution","core":"Пътеката свърши край стръмната скала. Връщането не е срам, когато напред има пропаст.","adaptations":{"day":"По-скоро не. Денят не благоприятства упорство на всяка цена.","love":"Отстъпи от спор, който само наранява.","work":"Изостави неподходящ подход навреме.","money":"По-добре малък пропуснат приход, отколкото голяма загуба.","travel":"Ако маршрутът е опасен, върни се."},"provenance":"modern_artistic","faces":[3,4,6,6,6],"sum":25,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":50,"title":"Дарът на утрото","tone":"favorable","core":"На прага някой остави кошница с плодове, без да поиска благодарност. Радостта понякога идва без шум.","adaptations":{"day":"Да. Денят може да донесе малка, неочаквана радост.","love":"Нежност може да се появи в обикновен жест.","work":"Непредвидена помощ ще улесни задачата.","money":"Възможна е скромна полза, а не голямо богатство.","travel":"Пътят е благоприятен за кратка приятна среща."},"provenance":"modern_artistic","faces":[3,6,6,6,6],"sum":27,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":51,"title":"Падналото слънце","tone":"adverse","core":"Слънцето слезе зад хълма и нощта стана тежка. Днес не е час нито да купуваш, нито да продаваш.","adaptations":{"day":"Не. Знакът е неблагоприятен за важни начинания; запази силите си.","love":"Не изяснявай трудна връзка чрез ултиматум.","work":"Отложи голямото решение, ако можеш.","money":"Не купувай и не продавай импулсивно; това е знак за въздържане.","travel":"Не започвай тежък път без наложителна причина."},"provenance":"modern_artistic","faces":[4,4,4,4,4],"sum":20,"historical_note":"Пет четворки: особено неблагоприятен знак; текстът предупреждава да не се купува или продава.","historical_status":"theme_from_reported_sources"},{"id":52,"title":"Маската на богатия","tone":"caution","core":"Златната маска сияе, ала лицето зад нея остава скрито. Не се кълни във вярност на блясъка.","adaptations":{"day":"По-скоро не. Денят може да предложи изкушение, което не си струва.","love":"Красивите думи не заместват добрите дела.","work":"Обещаната награда трябва да бъде проверена.","money":"Не приемай печалба, която никой не може да обясни.","travel":"Не се довери на непознат водач само заради уверен тон."},"provenance":"modern_artistic","faces":[4,4,4,4,6],"sum":22,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":53,"title":"Последният облак","tone":"mixed","core":"Облак скри слънцето, но зад него небето остана светло. Не се отчайвай от сянка, която е само временна.","adaptations":{"day":"По-скоро да. Денят може да започне с досада, но има добър шанс да завърши по-леко.","love":"Кратко отчуждение не означава край на чувствата.","work":"Временен застой не е провал; довърши необходимото.","money":"Изчакай ясен момент, преди да решиш за разход.","travel":"Възможно е забавяне, след което пътят се отваря."},"provenance":"modern_artistic","faces":[4,4,4,6,6],"sum":24,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":54,"title":"Общата трапеза","tone":"favorable","core":"На дългата трапеза има място за още един гост. Самотното дело става по-леко, когато се сподели.","adaptations":{"day":"Да. Денят обещава разбирателство и приятна среща.","love":"Добър знак за близост, дом и общо решение.","work":"Събери хората около една ясна цел.","money":"Съвместното начинание може да бъде разумно, ако всичко е уговорено.","travel":"Пътуване за семейна среща е под добър знак."},"provenance":"modern_artistic","faces":[4,4,6,6,6],"sum":26,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":55,"title":"Завоят на съдбата","tone":"mixed","core":"След последния завой пътникът не видя познатата долина, а нова земя. Краят на единия път не е присъда за другия.","adaptations":{"day":"Не е еднозначно. Денят може да не стане такъв, какъвто си го представял, но не е изгубен.","love":"Промяна в очакванията може да отвори друга възможност.","work":"Промяна на план ще се окаже необходима.","money":"Не преследвай изгубена възможност на всяка цена.","travel":"Подготви се за промяна на маршрута."},"provenance":"modern_artistic","faces":[4,6,6,6,6],"sum":28,"historical_note":null,"historical_status":"no_claim_of_ancient_correspondence"},{"id":56,"title":"Крайпътният Хермес","tone":"mixed","core":"На четириъгълния камък на Хермес пътищата се срещат и се разделят. Пратеникът показва посоките, но не избира вместо странника.","adaptations":{"day":"Не е еднозначно. Денят ще зависи от добрия избор, а не от щастлив случай.","love":"Истината между двама души има нужда от ясен глас.","work":"Добър момент да изпратиш съобщение или да уточниш договорка.","money":"Проверявай писма, документи и условия на размяна.","travel":"Пътуването е свързано с избор на точния път и време."},"provenance":"modern_artistic","faces":[6,6,6,6,6],"sum":30,"historical_note":"Пет шестици: в сродни надписи жребият се свързва с Хермес Четириъгълния; самият 56-и текст липсва от паметника в Кибира.","historical_status":"theme_from_reported_sources"}]};
+
+</script>
+  <script>
+/* Kibyra V3: 56 historical-style rolls; all interpretations are explicitly modern fiction. */
+(function(root){
+'use strict';
+const FACES=[1,3,4,6];
+const LABELS={day:'Денят',love:'Любов и отношения',work:'Работа и планове',money:'Пари и имущество',travel:'Пътуване',health:'Здраве',family:'Семейство и дом',friendship:'Приятели и доверие',study:'Учене и изпити',decision:'Общ въпрос'};
+const RULES=[
+ ['health',[/здрав|болест|болен|болна|лечен|оздрав|операц|диагноз|симптом|лекар|болниц|живея\s+ли|бремен|медицин|смърт|умира/]],
+ ['love',[/любов|обич|влюб|харесва\s+ли\s+ме|връзк|раздял|изнев|целув|жен[ия]|омъж|сватб|годен|брак|съпруг|съпруга|приятелката\s+ми|приятелят\s+ми|мъжа\s+ми|жена\s+ми|половинк|любим|женитб|венча/]],
+ ['money',[/пари|евро|лев[ао]|доход|печал|спест|кредит|заплат|дълг|вноск|богат|инвест|разход|наем|борс|акци|лотари|джакпот|залож|хазарт|добавк|пенси|бюджет|финанс|сметк|цена|купя|продам/]],
+ ['work',[/работ|шеф|колег|служб|повиш|началник|кариер|договор|бизнес|фирм|клиент|назнач|уволн|проект|офис|начинани|труд|профес/]],
+ ['study',[/изпит|училищ|университет|уч[аие]|оценк|кандидатств|матур|диплом|обучен|образован|курс/]],
+ ['travel',[/пъту|екскурз|полет|летищ|самолет|пътешеств|замин|отпъту|тръгн|пристиг|отид[аеи]|прибер|влак|автобус|шофи|границ|почивк|хотел|превоз|село|море/]],
+ ['family',[/семейств|родител|баща|майка|син(?:ът|а|ът)?(?:\s|$)|дъщер|дете|деца|брат|сестр|дом(?:ът|а)?(?:\s|$)|къщ|жилищ|роднин|наследств/]],
+ ['friendship',[/приятел|приятелк|довер|предател|познат|съсед|общуван|сговор|помир/]],
+ ['day',[/днес|утре|вчера|денят|деня|ден\s+ли|сутрин|вечер|седмиц|месец|уикенд|хубав\s+ден|добър\s+ден|ще\s+ми\s+върви/]]
+];
+function normalize(s){return String(s||'').toLowerCase().normalize('NFKC').replace(/[!?.,;:\-—]+/g,' ').replace(/\s+/g,' ').trim();}
+function classifyQuestion(question){
+ const q=normalize(question);
+ if(!q)return {topic:'day',label:LABELS.day,reason:'Няма въпрос; тълкуване за деня.'};
+ // Prioritized subjects. A date expression must never eclipse love, work, etc.
+ for(const [name,patterns] of RULES){if(patterns.some(r=>r.test(q)))return {topic:name,label:LABELS[name],reason:'Темата на въпроса е '+LABELS[name].toLowerCase()+'.'};}
+ return {topic:'decision',label:LABELS.decision,reason:'Общ въпрос без еднозначна тема.'};
+}
+function validateData(data){
+ if(!data||!Array.isArray(data.signs)||data.signs.length!==56)throw Error('Нужни са точно 56 различни знака.');
+ const seen=new Set();
+ for(const s of data.signs){
+  if(!Array.isArray(s.faces)||s.faces.length!==5||!s.faces.every(x=>FACES.includes(x))||s.faces.join(',')!==[...s.faces].sort((a,b)=>a-b).join(','))throw Error('Невалидна комбинация.');
+  if(s.sum!==s.faces.reduce((a,b)=>a+b,0)||seen.has(s.faces.join(','))||!s.core||!s.title||!s.adaptations)throw Error('Непълен или дублиран знак.');
+  seen.add(s.faces.join(','));
+ }
+ return true;
+}
+function lookup(data,roll){
+ if(!Array.isArray(roll)||roll.length!==5||!roll.every(x=>FACES.includes(x)))throw Error('Невалидно хвърляне.');
+ const key=[...roll].sort((a,b)=>a-b).join(',');
+ const s=data.signs.find(x=>x.faces.join(',')===key);
+ if(!s)throw Error('Непознат знак.');
+ return s;
+}
+const STANCES={
+ favorable:['Знакът е благоприятен.','По-скоро да — костите са благосклонни.','Има добър знак, макар нищо да не е обещано.'],
+ mixed:['Възможно е, но знакът е двусмислен.','По-скоро да, ако не прибързваш.','Знакът сочи обрат, но не дава сигурност.'],
+ caution:['Знакът те съветва да бъдеш предпазлив.','По-скоро не сега — огледай обстоятелствата.','Отговорът е неясен; бързането може да попречи.'],
+ adverse:['Знакът е неблагоприятен за момента.','По-скоро не — по-добре изчакай.','Костите предупреждават за препятствие.']
+};
+const GENERIC={
+ family:{favorable:'Добра дума ще смекчи домашно напрежение.',mixed:'Недоразумение в дома може да се разсее с търпение.',caution:'Не оставяй неизказано важното пред близките.',adverse:'Отложи спор и не вземай решение в гняв.'},
+ friendship:{favorable:'Верността се вижда в малките постъпки.',mixed:'Провери намеренията с време, не с обещания.',caution:'Не поверявай всичко, преди да опознаеш човека.',adverse:'Пази се от празни обещания и прибързано доверие.'},
+ study:{favorable:'Постоянството може да донесе заслужен успех.',mixed:'Напредъкът идва постепенно, след още една проверка.',caution:'Преговори пропуснатото, преди да се явиш на изпит.',adverse:'Не разчитай на късмет там, където се иска подготовка.'}
+};
+const SPECIFIC={
+ marriage:{favorable:'Пътят към съюз изглежда открит, ако желанието е взаимно.',mixed:'Възможна е сериозна връзка, но за съюз още са нужни ясни решения.',caution:'За брак не прибързвай, преди да сте сигурни един в друг.',adverse:'Знакът не е благоприятен за прибързано обещание за брак.'},
+ promotion:{favorable:'Повишението е възможно; покажи какво си постигнал.',mixed:'Има шанс за развитие, но решението може да се забави.',caution:'Не очаквай бързо повишение; първо изясни условията.',adverse:'Знакът не обещава повишение сега; подготви друг път за развитие.'},
+ return_home:{favorable:'Знакът е благоприятен за завръщане и среща с близкия човек.',mixed:'Завръщането е възможно, но може да има забавяне.',caution:'Не разчитай на скорошно завръщане без ясна вест.',adverse:'Знакът вещае препятствие по пътя обратно, не непременно окончателна раздяла.'},
+ exam:{favorable:'Знакът е благоприятен за изпита, особено ако си подготвен.',mixed:'Успехът е възможен, но зависи от последните усилия.',caution:'Преговори слабите места, преди да се явиш.',adverse:'Не разчитай на случайността: без допълнителна подготовка успехът е съмнителен.'},
+ feelings:{favorable:'Знакът е благоприятен за взаимност, но истината идва от човека срещу теб.',mixed:'Може да има чувства, които още не са изречени.',caution:'Не приемай мълчанието за сигурен знак на любов.',adverse:'Не очаквай ясен отговор, преди да поговорите открито.'},
+ lottery:{favorable:'Костите носят благоприятен символ, но не предсказват печелившо число или билет.',mixed:'Този знак не разкрива печалба: хазартът остава случаен.',caution:'Не рискувай пари заради символичен знак.',adverse:'Костите предупреждават да пазиш парите си, вместо да гониш случайна печалба.'},
+};
+function specialIntent(t,q){
+ const n=normalize(q);
+ if(t==='love'&&/ожен|омъж|женитб|сватб|брак|венча/.test(n))return 'marriage';
+ if(t==='work'&&/повиш|началник|издигн|по висока длъжност/.test(n))return 'promotion';
+ if(t==='family'&&/върн|прибир|прибере|дойде|пристиг/.test(n))return 'return_home';
+ if(t==='study'&&/изпит|матур|оценк/.test(n))return 'exam';
+ if(t==='love'&&/обич|влюб|харесва ли ме|чувств/.test(n))return 'feelings';
+ if(t==='money'&&/лотари|джакпот|хазарт|залож|залаган/.test(n))return 'lottery';
+ return '';
+}
+function wantsYesNo(q){return /\?|(?:^|\s)(дали|ще|може\s+ли|има\s+ли|добре\s+ли|хубав\s+ли|струва\s+ли|заслужава\s+ли|успея\s+ли)(?:\s|$)/i.test(q);}
+function asksWhen(q){return /кога|след\s+колко\s+време|на\s+коя\s+дата/i.test(q);}
+function contextualReading(data,roll,question){
+ const sign=lookup(data,roll), q=String(question||'').trim().slice(0,220),classified=classifyQuestion(q),t=classified.topic;
+ const stance=STANCES[sign.tone]||STANCES.mixed;
+ let direct='';
+ if(t==='health'){
+  direct='Костите не могат да предскажат здравен изход. При здравословен въпрос потърси лекарска преценка; посланието по-долу е само символично.';
+ } else if(t==='decision'){
+  direct=stance[sign.id%stance.length];
+ } else if(GENERIC[t]){
+  direct=GENERIC[t][sign.tone]||GENERIC[t].mixed;
+ } else {
+  direct=sign.adaptations[t]||stance[sign.id%stance.length];
+ }
+ const intent=specialIntent(t,q);
+ if(t!=='health'&&intent)direct=SPECIFIC[intent][sign.tone]||direct;
+ if(t!=='health'&&asksWhen(q)){
+  direct='Оракулът не посочва точен срок. '+direct;
+ } else if(t!=='health'&&wantsYesNo(q)&&!/^\s*(да[.!;, ]|не[.!;, ]|по-скоро|възможно|има\s|знакът\s)/i.test(direct)){
+  direct=stance[sign.id%stance.length]+' '+direct;
+ }
+ if(t==='money'&&intent==='lottery')
+  direct+=' Това не е прогноза за печалба и не е основание да залагаш пари.';
+ const msg=sign.core;
+ return {id:sign.id,faces:sign.faces.slice(),sum:sign.sum,title:sign.title,tone:sign.tone,
+   category:t,category_name:classified.label,question:q,direct_answer:direct,prophetic_verse:msg,
+   historical_note:sign.historical_note||'',historical_status:sign.historical_status,
+   label:'Съвременно художествено тълкуване — не превод от древен надпис.'};
+}
+function rollFive(cryptoObj){
+ if(cryptoObj&&typeof cryptoObj.getRandomValues==='function'){
+  const data=new Uint32Array(5);cryptoObj.getRandomValues(data);return Array.from(data,v=>FACES[v%4]);
+ }
+ return Array.from({length:5},()=>FACES[Math.floor(Math.random()*4)]);
+}
+root.KibyraOracle={FACES,LABELS,classifyQuestion,validateData,lookup,contextualReading,rollFive};
+})(typeof module!=='undefined'&&module.exports?module.exports:window);
+
+</script>
+  <script>
+'use strict';
+(function(){
+  const FACES=[1,3,4,6];
+  const DATA=window.KIBYRA_DATA||{signs:[]};
+  const ENGINE=window.KibyraOracle;
+  const ORACLES=Array.isArray(DATA.signs)?DATA.signs:[];
+  const INDEX=new Map(ORACLES.map(o=>[o.faces.join(','),o]));
+  const HISTORY_KEY='kibyra_history_v1'; // preserve installed users' earlier history
+  let history=[];
+  let active='oracle';
+  let current=null;
+  let rolling=false;
+  let soundOn=true;
+  let toastTimer=null;
+  const $=id=>document.getElementById(id);
+
+  try {const stored=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');history=Array.isArray(stored)?stored.slice(0,75):[];}catch(e){history=[];}
+
+  function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function saveHistory(){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,75)));}catch(e){}}
+  function timestamp(epoch){try{return new Intl.DateTimeFormat('bg-BG',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(epoch));}catch(e){return '';}}
+  function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('show'),2600);}
+  function playChime(){if(!soundOn)return;try{
+    const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+    const c=new C();[523.25,659.25,783.99].forEach((freq,i)=>{
+      const o=c.createOscillator(),gain=c.createGain(),now=c.currentTime+i*.095;
+      o.type='sine';o.frequency.value=freq;gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.05,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.57);
+      o.connect(gain);gain.connect(c.destination);o.start(now);o.stop(now+.61);
+    }); setTimeout(()=>{try{c.close();}catch(e){}},1050);
+  }catch(e){}}
+
+  window.toggleSound=function(){soundOn=!soundOn;$('sound-toggle').textContent=soundOn?'♫':'♪̸';$('sound-toggle').classList.toggle('off',!soundOn);$('sound-toggle').setAttribute('aria-pressed',String(soundOn));toast(soundOn?'Звукът е включен':'Звукът е изключен');};
+  window.go=function(screen){
+    if(!['oracle','history','catalog','about'].includes(screen))return;
+    active=screen;
+    document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id==='screen-'+screen));
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.screen===screen));
+    if(screen==='history')renderHistory();
+    if(screen==='catalog')renderCatalog();
+    window.scrollTo({top:0,behavior:'instant'});
+  };
+  window.kibyraBack=function(){if(active!=='oracle'){go('oracle');return true;}return false;};
+
+  function randomFace(){const arr=new Uint32Array(1);try{if(window.crypto&&window.crypto.getRandomValues){window.crypto.getRandomValues(arr);return FACES[arr[0]%4];}}catch(e){}return FACES[Math.floor(Math.random()*4)];}
+  function nextRoll(){
+    try {if(window.AndroidBridge&&typeof window.AndroidBridge.rollValues==='function'){
+      const data=JSON.parse(window.AndroidBridge.rollValues());
+      if(Array.isArray(data)&&data.length===5&&data.every(v=>FACES.includes(v)))return data;
+    }}catch(e){}
+    return Array.from({length:5},randomFace);
+  }
+  function setBones(values){document.querySelectorAll('.knuckle .glyph').forEach((e,i)=>{e.textContent=values[i];});}
+  function showOracle(o,faces,question,archive){
+    const reading=ENGINE.contextualReading(DATA,faces,question);
+    current={id:o.id,faces:faces.slice(),question:String(question||'').slice(0,220),created:Date.now(),reading:reading};
+    $('result-index').textContent='ЗНАК № '+String(o.id).padStart(2,'0')+' / 56';
+    $('result-title').textContent=reading.title;
+    $('result-topic').textContent='ТЕМА: '+reading.category_name;
+    $('result-direct').textContent=reading.direct_answer;
+    $('result-text').textContent=reading.prophetic_verse;
+    $('result-values').textContent='КОСТИ: '+faces.join(' · ')+'    |    СБОР: '+faces.reduce((s,v)=>s+v,0);
+    const note=$('result-historical');
+    if(reading.historical_note){note.textContent='Исторически мотив: '+reading.historical_note;note.classList.remove('hidden');}
+    else{note.textContent='';note.classList.add('hidden');}
+    $('result').classList.remove('hidden');
+    if(archive){history.unshift({id:current.id,faces:current.faces,question:current.question,created:current.created});history=history.slice(0,75);saveHistory();}
+    setTimeout(()=>$('result').scrollIntoView({behavior:'smooth',block:'start'}),130);
+  }
+  window.throwBones=function(){
+    if(rolling)return;
+    if(INDEX.size!==56){toast('Няма налични 56 послания.');return;}
+    rolling=true;
+    $('roll-button').disabled=true;
+    $('result').classList.add('hidden');
+    const tray=$('bone-tray');tray.classList.add('rolling');
+    const timer=setInterval(()=>setBones(nextRoll()),90);
+    const question=$('question').value.trim();
+    const faces=nextRoll();
+    setTimeout(()=>{
+      clearInterval(timer);tray.classList.remove('rolling');setBones(faces);rolling=false;$('roll-button').disabled=false;
+      const sorted=faces.slice().sort((a,b)=>a-b);
+      const oracle=INDEX.get(sorted.join(','));
+      if(!oracle){toast('Непознато съчетание.');return;}
+      playChime();showOracle(oracle,faces,question,true);
+    },820);
+  };
+
+  function recordCard(r){
+    const o=ORACLES.find(x=>x.id===r.id);if(!o)return '';
+    return '<button type="button" class="history-item" data-history-id="'+r.created+'">'+
+      '<div class="item-row"><span class="item-meta">'+escapeHtml(timestamp(r.created))+' · '+escapeHtml(r.faces.join(' · '))+'</span><span class="item-arrow">↗</span></div>'+
+      '<div class="item-title">'+escapeHtml(o.title)+'</div>'+
+      '<div class="item-text">'+escapeHtml(r.question?('Въпрос: '+r.question):o.core)+'</div></button>';
+  }
+  function renderHistory(){
+    const list=$('history-list');
+    list.innerHTML=history.length?history.map(recordCard).join(''):'<div class="empty-history"><span class="empty-star">✧</span>Тук още няма хвърляния.<br/>Попитай оракула и започни своята история.</div>';
+    $('clear-history').classList.toggle('hidden',!history.length);
+    list.querySelectorAll('[data-history-id]').forEach(b=>b.addEventListener('click',()=>{
+      const r=history.find(x=>String(x.created)===b.dataset.historyId);if(!r)return;
+      const o=ORACLES.find(x=>x.id===r.id);if(!o)return;
+      go('oracle');$('question').value=r.question||'';setBones(r.faces);showOracle(o,r.faces,r.question,false);
+    }));
+  }
+  window.clearHistory=function(){if(!history.length)return;if(!confirm('Да изтрия ли всички запазени хвърляния от това устройство?'))return;history=[];saveHistory();renderHistory();toast('Историята е изтрита');};
+  function renderCatalog(){
+    const list=$('catalog-list');if(list.dataset.ready==='1')return;
+    list.innerHTML=ORACLES.map(o=>'<button type="button" class="catalog-item" data-oracle-id="'+o.id+'"><div class="item-row"><span class="item-meta">№ '+String(o.id).padStart(2,'0')+' · '+o.faces.join(' – ')+' · сбор '+o.sum+'</span><span class="item-arrow">↗</span></div><div class="item-title">'+escapeHtml(o.title)+'</div><div class="item-text">'+escapeHtml(o.core)+'</div></button>').join('');
+    list.querySelectorAll('[data-oracle-id]').forEach(b=>b.addEventListener('click',()=>{
+      const o=ORACLES.find(x=>String(x.id)===b.dataset.oracleId);if(!o)return;
+      go('oracle');setBones(o.faces);showOracle(o,o.faces,'',false);
+      toast('Преглед на съчетание — не е ново хвърляне');
+    }));
+    list.dataset.ready='1';
+  }
+  window.shareCurrent=function(){
+    if(!current||!current.reading)return;
+    const r=current.reading;
+    const text='Оракулът на Кибира — 56 съдби\n'
+      +(current.question?'Въпрос: '+current.question+'\n':'')
+      +'Знак № '+r.id+' · '+r.title+'\n'
+      +'Отговор: '+r.direct_answer+'\n'
+      +'Послание: '+r.prophetic_verse+'\n'
+      +'Кости: '+current.faces.join(' · ')+'\n'
+      +'(Съвременно художествено тълкуване)';
+    try{if(window.AndroidBridge&&window.AndroidBridge.shareText){window.AndroidBridge.shareText(text);return;}}catch(e){}
+    if(navigator.share){navigator.share({title:'Оракулът на Кибира',text}).catch(()=>{});return;}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast('Посланието е копирано')).catch(()=>toast('Споделянето не се поддържа тук'));return;}
+    prompt('Копирай посланието:',text);
+  };
+  window.openSource=function(url){
+    if(!String(url).startsWith('https://doi.org/10.37095/gephyra.2002699'))return;
+    try{if(window.AndroidBridge&&window.AndroidBridge.openSource){window.AndroidBridge.openSource(url);return;}}catch(e){}
+    window.open(url,'_blank','noopener,noreferrer');
+  };
+  try{ENGINE.validateData(DATA);}catch(e){toast('Грешка в каталога с пророчества');}
+})();
+
+</script>
+</body>
+</html>
