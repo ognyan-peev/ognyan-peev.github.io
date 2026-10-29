@@ -11,8 +11,47 @@
   const stateKey = `reader_state_${work}`;
   const legacyKey = `progress_${work}`;
   const api = "https://ognyan-books-reader.ognianpeev.workers.dev/v1/books/" + work;
+  const gateway = "https://ognyan-books-reader.ognianpeev.workers.dev";
+  let sessionToken = null;
+  let sessionExpiry = 0;
+  let challengePromise = null;
+  async function ensureSession() {
+    if (sessionToken && Date.now() < sessionExpiry - 30000) return sessionToken;
+    if (challengePromise) return challengePromise;
+    challengePromise = (async () => {
+      let challenge = document.getElementById('readerChallenge');
+      if (!challenge) {
+        challenge = document.createElement('div');
+        challenge.id = 'readerChallenge';
+        challenge.style.cssText = 'padding:18px;text-align:center';
+        $("readerText").before(challenge);
+      }
+      challenge.textContent = 'Проверка преди четене…';
+      if (!window.turnstile) {
+        await new Promise((resolve,reject) => {
+          const script=document.createElement('script');
+          script.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+          script.async=true; script.onload=resolve; script.onerror=reject;
+          document.head.appendChild(script);
+        });
+      }
+      challenge.textContent = '';
+      const token=await new Promise((resolve,reject) => {
+        const id=window.turnstile.render(challenge,{sitekey:'0x4AAAAAAFqwZhhVtz8_tIJ_',callback:resolve,'error-callback':()=>reject(new Error('Проверката не успя. Опитайте отново.'))});
+        challenge.dataset.widgetId=id;
+      });
+      const response=await fetch(gateway+'/v1/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token}),cache:'no-store',credentials:'omit'});
+      if (!response.ok) throw new Error('Проверката не успя. Опитайте отново.');
+      const session=await response.json();
+      sessionToken=session.token; sessionExpiry=session.expires;
+      challenge.remove();
+      return sessionToken;
+    })().finally(()=>{challengePromise=null;});
+    return challengePromise;
+  }
   async function getJSON(path = "") {
-    const response = await fetch(api + path, {cache:"no-store", credentials:"omit"});
+    const token = path ? await ensureSession() : null;
+    const response = await fetch(api + path, {cache:"no-store", credentials:"omit", headers:token?{'Authorization':'Bearer '+token}:{}});
     if (!response.ok) throw new Error(response.status === 429 ? "Много бързи заявки. Изчакайте минута и опитайте отново." : "Главата не можа да бъде заредена. Опитайте отново.");
     return response.json();
   }
