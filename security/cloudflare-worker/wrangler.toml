@@ -1,0 +1,14 @@
+name = "ognyan-books-edge-protection"
+main = "src/index.js"
+compatibility_date = "2026-10-21"
+
+# Do not deploy on a domain until DNS and routing are configured deliberately.
+# GitHub Pages remains directly accessible even after deploying this Worker.
+
+[[ratelimits]]
+name = "CONTENT_RATE_LIMIT"
+namespace_id = "1001"
+
+[ratelimits.simple]
+limit = 40
+period = 60
