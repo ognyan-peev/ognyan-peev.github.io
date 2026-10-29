@@ -33,13 +33,9 @@
     if (saved.revision) return saved.anchor || null;
     if (!window.WORK_PREVIOUS) {
       try {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'assets/data/svetite-zemi-progress.js?v=20261021';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.head.appendChild(script);
-        });
+        const response = await fetch('https://ognyan-books-reader.ognianpeev.workers.dev/v1/books/svetite-zemi/migration', {cache:'no-store',credentials:'omit'});
+        if (!response.ok) return null;
+        window.WORK_PREVIOUS = await response.json();
       } catch (_) { return null; }
     }
     const old = window.WORK_PREVIOUS;
@@ -74,3 +70,4 @@
 
   window.ReadingPosition = { capture, target, migrate };
 })();
+
