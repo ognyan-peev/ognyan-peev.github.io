@@ -10,6 +10,12 @@
   const explicitSection = params.has("section");
   const stateKey = `reader_state_${work}`;
   const legacyKey = `progress_${work}`;
+  const api = "https://ognyan-books-reader.ognianpeev.workers.dev/v1/books/" + work;
+  async function getJSON(path = "") {
+    const response = await fetch(api + path, {cache:"no-store", credentials:"omit"});
+    if (!response.ok) throw new Error(response.status === 429 ? "Много бързи заявки. Изчакайте минута и опитайте отново." : "Главата не можа да бъде заредена. Опитайте отново.");
+    return response.json();
+  }
   let data = null;
   let section = 0;
   let size = parseInt(storage.getItem("reader_size") || "20", 10) || 20;
@@ -116,8 +122,34 @@
     clearTimeout(scrollSaveTimer);
     ++restoreVersion;
     restoring = false;
-    section = clamp(index, 0, data.sections.length - 1);
-    const s = data.sections[section];
+    const targetSection = clamp(index, 0, data.sections.length - 1);
+    let s = data.sections[targetSection];
+    restoring = true;
+    try {
+      if (!Array.isArray(s.paragraphs)) {
+        const loaded = await getJSON("/sections/" + targetSection);
+        if (navigation !== navigationVersion) return;
+        if (!Array.isArray(loaded.paragraphs) || loaded.revision !== (data.revision || null)) throw new Error("Текстът е обновен. Презаредете страницата.");
+        s = {...s, paragraphs:loaded.paragraphs};
+        data.sections[targetSection] = s;
+      }
+    } catch (error) {
+      if (navigation !== navigationVersion) return;
+      restoring = false;
+      $("chapterSelect").value = String(section);
+      notify(error.message);
+      if (!$("readerText").children.length) {
+        $("readerText").textContent = error.message;
+        const retry = document.createElement("button");
+        retry.className = "button";
+        retry.textContent = "Опитай отново";
+        retry.onclick = () => setSection(targetSection, options);
+        $("readerText").appendChild(retry);
+      }
+      return;
+    }
+    if (navigation !== navigationVersion) return;
+    section = targetSection;
     $("chapterTitle").textContent = s.title || "";
     $("chapterSubtitle").textContent = s.subtitle || "";
     $("chapterSubtitle").style.display = s.subtitle ? "block" : "none";
@@ -232,11 +264,18 @@
     }, 1000);
   }
 
-  const script = document.createElement("script");
-  script.src = `assets/data/${work}.js${work === "svetite-zemi" ? "?v=20261021" : ""}`;
-  script.onload = initialize;
-  script.onerror = () => { $("readerText").textContent = "Произведението не можа да бъде заредено."; };
-  document.head.appendChild(script);
+  async function loadWork() {
+    try { window.WORK_DATA = await getJSON(); initialize(); }
+    catch (error) {
+      $("readerText").textContent = error.message;
+      const retry = document.createElement("button");
+      retry.className = "button";
+      retry.textContent = "Опитай отново";
+      retry.onclick = loadWork;
+      $("readerText").appendChild(retry);
+    }
+  }
+  loadWork();
 
   $("prevBtn").addEventListener("click", () => setSection(section - 1));
   $("nextBtn").addEventListener("click", () => setSection(section + 1));
@@ -321,3 +360,4 @@
     }
   });
 })();
+
