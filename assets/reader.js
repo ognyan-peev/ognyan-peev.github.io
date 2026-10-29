@@ -55,6 +55,7 @@
     if (!response.ok) throw new Error(response.status === 429 ? "Много бързи заявки. Изчакайте минута и опитайте отново." : "Главата не можа да бъде заредена. Опитайте отново.");
     return response.json();
   }
+  window.readerGetMigration = () => getJSON('/migration');
   let data = null;
   let section = 0;
   let size = parseInt(storage.getItem("reader_size") || "20", 10) || 20;
