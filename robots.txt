@@ -1,0 +1,7 @@
+# Rules for cooperative crawlers; this file is not an access-control mechanism.
+User-agent: *
+Disallow: /assets/data/
+Disallow: /assets/reader.js
+Disallow: /assets/reading-position.js
+Allow: /
+Sitemap: https://ognyan-peev.github.io/sitemap.xml
