@@ -4,4 +4,3 @@ Disallow: /assets/data/
 Disallow: /assets/reader.js
 Disallow: /assets/reading-position.js
 Allow: /
-Sitemap: https://ognyan-peev.github.io/sitemap.xml
