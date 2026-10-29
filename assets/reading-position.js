@@ -33,9 +33,7 @@
     if (saved.revision) return saved.anchor || null;
     if (!window.WORK_PREVIOUS) {
       try {
-        const response = await fetch('https://ognyan-books-reader.ognianpeev.workers.dev/v1/books/svetite-zemi/migration', {cache:'no-store',credentials:'omit'});
-        if (!response.ok) return null;
-        window.WORK_PREVIOUS = await response.json();
+        window.WORK_PREVIOUS = await window.readerGetMigration();
       } catch (_) { return null; }
     }
     const old = window.WORK_PREVIOUS;
